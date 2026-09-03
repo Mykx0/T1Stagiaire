@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @SpringBootApplication
 public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
-
+    // Edouard Lambert
     private final GestionnaireRepository gestionnaireRepository;
     private final EmprunteurRepository emprunteurRepository;
     private final PreposeRepository preposeRepository;
