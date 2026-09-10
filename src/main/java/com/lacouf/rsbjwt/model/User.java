@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 
 @Entity
+@Table(name = "user_account")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class User {
     @Id
@@ -16,7 +17,7 @@ public abstract class User {
     @Embedded
     private Credentials credentials;
 
-    public User(String firstName, String lastName, String email, String password, Role role) {
+    public User( String firstName, String lastName, String email, String password, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.credentials = new Credentials(
@@ -26,6 +27,6 @@ public abstract class User {
         );
     }
 
-    public User(String firstName, String lastName, String email, String password) {
+    public User() {
     }
 }
