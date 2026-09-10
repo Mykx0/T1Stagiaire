@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @SpringBootApplication
 public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
-    // Edouard Lambert
+    // Brahim El khazraji UwU
     private final UserAppRepository userAppRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -30,6 +30,5 @@ public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
 
         final Optional<UserApp> userAppByEmail = userAppRepository.findUserAppByEmail("l@l.com");
         userAppByEmail.ifPresent(userApp -> System.out.println("user " + userAppByEmail));
-
     }
 }

@@ -25,4 +25,6 @@ public class Employe extends Utilisateur{
         super(id, name, surname, email, password);
         this.compagnie = compagnie;
     }
+    public Employe(){}
+
 }

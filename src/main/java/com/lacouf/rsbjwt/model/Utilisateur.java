@@ -21,6 +21,8 @@ public abstract class Utilisateur {
         this.password = password;
     }
 
+    public Utilisateur(){}
+
     public Long getId() {
         return id;
     }
