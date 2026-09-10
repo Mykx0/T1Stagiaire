@@ -1,18 +1,8 @@
 package com.lacouf.rsbjwt.service.dto;
 
-import com.lacouf.rsbjwt.model.Emprunteur;
 import com.lacouf.rsbjwt.model.UserApp;
 import com.lacouf.rsbjwt.model.auth.Role;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 public class UserDTO {
     private Long id;
     private String firstName;
@@ -20,10 +10,12 @@ public class UserDTO {
     private String email;
     private Role role;
 
-    public UserDTO(String firstName, String lastName, Role role) {
+    public UserDTO() {
+    }
+
+    public UserDTO(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.role = role;
     }
 
     public UserDTO(UserApp user) {
@@ -31,7 +23,37 @@ public class UserDTO {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();
-        this.role = user.getRole();
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

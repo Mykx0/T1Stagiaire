@@ -4,7 +4,6 @@ import com.lacouf.rsbjwt.repository.UserAppRepository;
 import com.lacouf.rsbjwt.model.UserApp;
 import com.lacouf.rsbjwt.security.exception.AuthenticationException;
 import com.lacouf.rsbjwt.security.exception.UserNotFoundException;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,10 +13,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class AuthProvider implements AuthenticationProvider{
 	private final PasswordEncoder passwordEncoder;
 	private final UserAppRepository userAppRepository;
+
+	public AuthProvider(PasswordEncoder passwordEncoder, UserAppRepository userAppRepository) {
+		this.passwordEncoder = passwordEncoder;
+		this.userAppRepository = userAppRepository;
+	}
 
 	@Override
 	public Authentication authenticate(Authentication authentication) {
@@ -25,7 +28,7 @@ public class AuthProvider implements AuthenticationProvider{
 		validateAuthentication(authentication, user);
 		return new UsernamePasswordAuthenticationToken(
 			user.getEmail(),
-			user.getPassword(),
+			user.getClass(),
 			user.getAuthorities()
 		);
 	}

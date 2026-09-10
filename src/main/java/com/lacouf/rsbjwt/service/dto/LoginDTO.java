@@ -1,13 +1,14 @@
 package com.lacouf.rsbjwt.service.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class LoginDTO{
 	private String email;
 	private String password;
+
+	public LoginDTO(String email, String password) {
+		this.email = email;
+		this.password = password;
+	}
+
+	public LoginDTO() {
+	}
 }
