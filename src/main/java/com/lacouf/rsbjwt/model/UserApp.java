@@ -9,14 +9,25 @@ import java.util.Collection;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class UserApp {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private String firstName;
     private String lastName;
 
     @Embedded
     private Credentials credentials;
+
+    protected UserApp() {
+    }
+
+    protected UserApp(String firstName, String lastName, Credentials credentials) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.credentials = credentials;
+    }
 
     public Long getId() {
         return id;
