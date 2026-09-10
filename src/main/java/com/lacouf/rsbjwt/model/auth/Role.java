@@ -4,9 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 public enum Role{
-	GESTIONNAIRE("ROLE_GESTIONNAIRE"),
-	PREPOSE("ROLE_PREPOSE"),
-	EMPRUNTEUR("ROLE_EMPRUNTEUR"),
+	GESTIONNAIRE("ROLE_INTERNSHIP_MANAGER"),
+	PREPOSE("ROLE_PROFESSOR"),
+	EMPRUNTEUR("ROLE_EMPLOYER"),
+	STUDENT("ROLE_STUDENT")
 	;
 
 	private final String string;
