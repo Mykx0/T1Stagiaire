@@ -29,4 +29,21 @@
     --color-chrome-white-950: #1c260d;
 }
 
-body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+/*forms*/
+.form-body{
+    @apply flex min-h-screen items-center justify-center px-4 py-12
+}
+.form-body-enfant{
+    @apply w-full max-w-md space-y-6 p-8 rounded-2xl border-2
+}
+
+/*inputs*/
+.formInputs{
+    @apply w-full flex flex-col relative mb-3
+}
+.labels{
+    @apply absolute -mt-3 ms-3 px-0.5 font-medium bg-white
+}
+.inputs{
+    @apply border rounded-md px-3 py-2 shadow-sm outline-none transition-all w-full
+}
