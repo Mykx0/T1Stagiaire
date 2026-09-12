@@ -37,6 +37,10 @@ const RegisterPage = () => {
             setError('Le nom et le prénom doivent contenir au moins 1 caractère');
             return false;
         }
+        if (!validateMatricule()){
+            setError('Le matricule doit contenir exactement 7 chiffres');
+            return false;
+        }
         if (!validateEmail()){
             setError('Veuillez entrer un courriel valide');
             return false;
@@ -53,6 +57,10 @@ const RegisterPage = () => {
     };
     const champsComplets = () => {
         return values.nom !== '' && values.prenom !== '' && values.matricule !== '' && values.courriel !== '' && values.motPasse !== '' && values.motPasseConfirmation !== '';
+    }
+    const validateMatricule = () => {
+        const matriculeRegex = /^\d{7}$/
+        return matriculeRegex.test(values.matricule);
     }
     const validateEmail = () => {
         const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -75,7 +83,7 @@ const RegisterPage = () => {
                 courriel: values.courriel,
                 motPasse: values.motPasse
             };
-            // await new Promise(resolve => setTimeout(resolve, 2000));
+            await new Promise(resolve => setTimeout(resolve, 2000));
             console.log(data)
             setValues({
                 nom: '',
@@ -85,7 +93,7 @@ const RegisterPage = () => {
                 motPasse: '',
                 motPasseConfirmation: ''
             });
-            setSimulationResponse( 'Inscription réussie ! Vous pouvez maintenant vous connecter. \nDonnées envoyées : ' + JSON.stringify(data));
+            setSimulationResponse( 'Inscription réussie ! \nVous pouvez maintenant vous connecter. \nDonnées envoyées :' + JSON.stringify(data));
         }catch(e){
             setDisableButton(false);
             setError('Une erreur est survenue lors de l\'inscription');
@@ -96,11 +104,11 @@ const RegisterPage = () => {
 
 
     return (
-        <div className="form-body">
-            <div className={"form-body-enfant"}>
+        <div className="background">
+            <div className={"form-body"}>
                 <div>
-                    <h1 className={"text-3xl"}>Créer un compte</h1>
-                    <p className="mt-2 text-sm">Écrivez vos informations pour s'inscrire</p>
+                    <h1 className={"title"}>Créer un compte</h1>
+                    <p className="subtitle">Écrivez vos informations pour s'inscrire</p>
                 </div>
                 <form onSubmit={handleRegister}
                       className="forms-style">
@@ -115,9 +123,10 @@ const RegisterPage = () => {
                             label={input.label}
                       />
                     ))}
-                    {error && <p className="text-red-500">{error}</p>}
-                    {simulationResponse && <p className="text-green-500">{simulationResponse}</p>}
-                    <button type="submit" className="text-black p-2 rounded-md w-full bg-chrome-white-300"
+                    {error && <p className="error">{error}</p>}
+                    {simulationResponse && <p className="simulationResponse">{simulationResponse}</p>}
+                    <button type="submit"
+                            className={`${disableButton ? 'btn-disabled' : 'btn-active'} btn`}
                             disabled={disableButton}>
                         {disableButton ? 'Inscription en cours...' : 'S\'inscrire'}
                     </button>
