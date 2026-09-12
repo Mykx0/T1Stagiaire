@@ -29,21 +29,59 @@
     --color-chrome-white-950: #1c260d;
 }
 
+/*general*/
+.title{
+    @apply text-3xl font-bold
+    text-chrome-white-100
+}
+.subtitle{
+    @apply text-sm font-medium mt-2
+    text-chrome-white-200
+}
+.background{
+    @apply flex min-h-screen items-center justify-center px-4 py-12
+    bg-kingfisher-daisy-100
+}
+.btn{
+    @apply inline-flex items-center justify-center font-semibold rounded-md px-4 py-2 text-base
+    focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm
+}
+.btn-disabled{
+    @apply bg-chrome-white-200 text-chrome-white-400 cursor-not-allowed
+}
+.btn-active{
+    @apply text-kingfisher-daisy-600 bg-chrome-white-100 hover:bg-chrome-white-300
+}
+
 /*forms*/
 .form-body{
-    @apply flex min-h-screen items-center justify-center px-4 py-12
+    @apply w-md space-y-6 p-8 rounded-2xl border-2 text-center
+    border-chrome-white-50 bg-kingfisher-daisy-900
 }
-.form-body-enfant{
-    @apply w-full max-w-md space-y-6 p-8 rounded-2xl border-2
+.forms-style{
+    @apply grid gap-2
+}
+.simulationResponse{
+    @apply text-sm p-2 rounded border whitespace-pre-wrap break-all wrap-break-word
+    text-chrome-white-200 bg-kingfisher-daisy-800 border-chrome-white-200
 }
 
 /*inputs*/
+.btn-formEyes{
+    @apply h-full absolute right-3 top-1/2 -translate-y-1/2 font-semibold text-chrome-white-200 hover:text-chrome-white-400
+}
 .formInputs{
     @apply w-full flex flex-col relative mb-3
 }
 .labels{
-    @apply absolute -mt-3 ms-3 px-0.5 font-medium bg-white
+    @apply absolute -mt-3 ms-3 px-0.5 font-medium
+    bg-kingfisher-daisy-900 text-chrome-white-100
 }
 .inputs{
-    @apply border rounded-md px-3 py-2 shadow-sm outline-none transition-all w-full
+    @apply rounded-md px-3 py-2 shadow-sm outline-none transition-all w-full border-2 focus:ring-1 focus:ring-offset-1
+    border-chrome-white-200 bg-kingfisher-daisy-900 text-chrome-white-200 focus:ring-chrome-white-200
+}
+.error{
+    @apply text-sm p-2 rounded border
+    text-red-600 bg-red-50 border-red-200
 }
