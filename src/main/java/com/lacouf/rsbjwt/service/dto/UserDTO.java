@@ -1,5 +1,6 @@
 package com.lacouf.rsbjwt.service.dto;
 
+import com.lacouf.rsbjwt.model.User;
 import com.lacouf.rsbjwt.model.UserApp;
 import com.lacouf.rsbjwt.model.auth.Role;
 
@@ -18,7 +19,7 @@ public class UserDTO {
         this.lastName = lastName;
     }
 
-    public UserDTO(UserApp user) {
+    public UserDTO(User user) {
         this.id = user.getId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
