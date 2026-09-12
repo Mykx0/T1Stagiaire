@@ -18,9 +18,11 @@ const FormInputs = ({placeholder, type, value, onChange, name, label}) => {
                 />
                 {type === 'password' && (
                     <button type="button" onClick={() => setShowPassword(!showPassword)}
-                    className={"h-full absolute right-3 top-1/2 -translate-y-1/2 font-semibold"}
+                    className={"btn-formEyes"}
                     >
-                        {showPassword ? 'Hide' : 'Show'}
+                        {showPassword ?
+                            (<svg className={"size-6"}><use href={"/sprite.svg#eyeClose"}/> </svg>)
+                            : (<svg className={"size-6"}><use href={"/sprite.svg#eyeOpen"}/></svg>)}
                     </button>
                 )}
             </div>
