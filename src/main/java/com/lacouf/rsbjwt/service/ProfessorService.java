@@ -7,8 +7,8 @@ import com.lacouf.rsbjwt.model.auth.Role;
 import com.lacouf.rsbjwt.repository.ProfessorRepository;
 import com.lacouf.rsbjwt.repository.UserAppRepository;
 import com.lacouf.rsbjwt.security.exception.EmailAlreadyUsedException;
+import com.lacouf.rsbjwt.security.exception.ProfessorNotFoundException;
 import com.lacouf.rsbjwt.service.dto.ProfessorDTO;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -49,5 +49,40 @@ public class ProfessorService {
         Professor savedProfessor = professorRepository.save(professor);
 
         return professorMapper.toDto(savedProfessor);
+    }
+    public ProfessorDTO update(Long id, ProfessorDTO dto) {
+        Professor professor = professorRepository.findById(id)
+                .orElseThrow(() -> new ProfessorNotFoundException(id));
+
+        String newEmail = dto.getEmail().trim().toLowerCase();
+        String currentEmail = professor.getEmail();
+
+        if (!newEmail.equalsIgnoreCase(currentEmail)) {
+            if (userAppRepository.findUserAppByEmail(newEmail).isPresent()) {
+                throw new EmailAlreadyUsedException(newEmail);
+            }
+        }
+        professor.setFirstName(dto.getFirstName());
+        professor.setLastName(dto.getLastName());
+        professor.setDepartment(dto.getDepartment());
+        professor.setSpecialization(dto.getSpecialization());
+
+        String newPassword = dto.getPassword();
+        String encodedPassword;
+        if (newPassword == null || newPassword.isBlank()) {
+            encodedPassword = professor.getPassword();
+        } else {
+            encodedPassword = passwordEncoder.encode(newPassword);
+        }
+
+        Credentials credentials = new Credentials(
+                newEmail,
+                encodedPassword,
+                Role.PROFESSOR
+        );
+        professor.setCredentials(credentials);
+
+        Professor updatedProfessor = professorRepository.save(professor);
+        return professorMapper.toDto(updatedProfessor);
     }
 }

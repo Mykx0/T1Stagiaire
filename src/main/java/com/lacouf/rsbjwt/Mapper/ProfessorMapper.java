@@ -2,6 +2,7 @@ package com.lacouf.rsbjwt.Mapper;
 
 import com.lacouf.rsbjwt.model.Professor;
 import com.lacouf.rsbjwt.model.auth.Credentials;
+import com.lacouf.rsbjwt.model.auth.Role;
 import com.lacouf.rsbjwt.service.dto.ProfessorDTO;
 import org.springframework.stereotype.Component;
 
@@ -9,13 +10,11 @@ import org.springframework.stereotype.Component;
 public class ProfessorMapper {
 
     public Professor toEntity(ProfessorDTO dto, Credentials credentials) {
-        if (dto == null) {
-            return null;
-        }
         return new Professor(
                 dto.getFirstName(),
                 dto.getLastName(),
                 credentials,
+                dto.getEmail(),
                 dto.getDepartment(),
                 dto.getSpecialization()
         );
@@ -28,7 +27,8 @@ public class ProfessorMapper {
                 professor.getLastName(),
                 professor.getEmail(),
                 professor.getDepartment(),
-                professor.getSpecialization()
+                professor.getSpecialization(),
+                Role.PROFESSOR
         );
     }
 }

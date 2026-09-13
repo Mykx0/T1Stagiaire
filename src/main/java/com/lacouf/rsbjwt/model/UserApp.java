@@ -56,4 +56,7 @@ public abstract class UserApp {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return credentials.getAuthorities();
     }
+    public void setCredentials(Credentials credentials) {
+        this.credentials = credentials;
+    }
 }

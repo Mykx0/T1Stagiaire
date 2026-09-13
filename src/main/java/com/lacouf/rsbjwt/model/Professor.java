@@ -7,9 +7,11 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "professors")
 @PrimaryKeyJoinColumn(name = "id")
 public class Professor extends UserApp {
+
+    @Column(nullable = false, unique = true)
+    private String email;
 
     @Column(nullable = false)
     private String department;
@@ -24,12 +26,34 @@ public class Professor extends UserApp {
             String firstName,
             String lastName,
             Credentials credentials,
+            String email,
             String department,
             String specialization
     ) {
         super(firstName, lastName, credentials);
+        this.email = email;
         this.department = department;
         this.specialization = specialization;
+    }
+    public String getFirstName() {
+        return super.getFirstName();
+    }
+    public void setFirstName(String firstName) {
+        this.setFirstName(firstName);
+    }
+    public String getLastName() {
+        return super.getLastName();
+    }
+    public void setLastName(String lastName) {
+        this.setLastName(lastName);
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getDepartment() {

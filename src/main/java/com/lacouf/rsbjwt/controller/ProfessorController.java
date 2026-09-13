@@ -7,8 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
-@RequestMapping("/professor")
+@RequestMapping("/profRegister")
 public class ProfessorController {
 
     private final ProfessorService professorService;
@@ -19,9 +18,17 @@ public class ProfessorController {
 
     @PostMapping("/profRegister")
     public ResponseEntity<ProfessorDTO> register(
-          @RequestBody ProfessorDTO professorDTO
+            @RequestBody ProfessorDTO professorDTO
     ) {
         ProfessorDTO response = professorService.register(professorDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+    @PutMapping("/updateProfProfil/{profId}")
+    public ResponseEntity<ProfessorDTO> updateProfProfil(
+            @PathVariable Long profId,
+            @RequestBody ProfessorDTO professorDTO
+    ) {
+        ProfessorDTO response = professorService.update(profId, professorDTO);
+        return ResponseEntity.ok(response);
     }
 }
