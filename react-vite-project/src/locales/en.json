@@ -1,0 +1,42 @@
+{
+  "register": {
+    "title": "Create an Account",
+    "subtitle": "Enter your information to sign up",
+    "submitButton": "Sign up",
+    "submitting": "Signing up...",
+    "successMessage": "Registration successful! You can now log in.\nData sent:",
+    "inputs": {
+      "lastName": {
+        "label": "Last name",
+        "placeholder": "Your last name"
+      },
+      "firstName": {
+        "label": "First name",
+        "placeholder": "Your first name"
+      },
+      "idNumber": {
+        "label": "ID Number",
+        "placeholder": "Your ID number"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "you@example.com"
+      },
+      "password": {
+        "label": "Password"
+      },
+      "confirmPassword": {
+        "label": "Confirm password"
+      }
+    },
+    "errors": {
+      "allFieldsRequired": "Please fill in all fields",
+      "nameMinLength": "First and last name must contain at least 1 character",
+      "invalidMatricule": "ID number must contain exactly 7 digits",
+      "invalidEmail": "Please enter a valid email address",
+      "passwordMinLength": "Password must be at least 8 characters long",
+      "passwordMismatch": "Passwords do not match",
+      "genericError": "An error occurred during registration"
+    }
+  }
+}
