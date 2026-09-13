@@ -18,4 +18,6 @@ public class Compagnie {
         this.compagniName = compagniName;
         this.city = city;
     }
+
+    public Compagnie(){};
 }

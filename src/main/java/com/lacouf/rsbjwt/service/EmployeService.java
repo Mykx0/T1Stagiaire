@@ -30,6 +30,6 @@ public class EmployeService {
 
     @Transactional
     public EmployeDTO findEmployeBy_Id(Long id){
-        return EmployeDTO.of((Employe) employeSpringRepo.findEmployeBy_id(id));
+        return EmployeDTO.of((Employe) employeSpringRepo.findEmployeById(id));
     }
 }

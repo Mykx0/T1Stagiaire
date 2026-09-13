@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @SpringBootApplication
 public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
-    // Brahim El khazraji UwU
+    // Brahim El khazraji
     private final UserAppRepository userAppRepository;
     private final PasswordEncoder passwordEncoder;
 
