@@ -5,9 +5,10 @@ import jakarta.persistence.Entity;
 
 @Entity
 public class Student extends User {
-
-    public Student(String firstName, String lastName, String email, String password) {
+    private Discipline discipline;
+    public Student(String firstName, String lastName, String email, String password, Discipline discipline) {
         super(firstName, lastName, email, password, Role.STUDENT);
+        this.discipline = discipline;
     }
 
     public Student() {

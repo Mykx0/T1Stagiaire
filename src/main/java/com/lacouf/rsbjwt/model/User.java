@@ -29,4 +29,34 @@ public abstract class User {
 
     public User() {
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return credentials.getEmail();
+    }
+
+    public String getPassword() {
+        return credentials.getPassword();
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", credentials=" + credentials +
+                '}';
+    }
 }
