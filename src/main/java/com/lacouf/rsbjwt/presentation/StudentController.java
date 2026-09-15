@@ -4,6 +4,7 @@ import com.lacouf.rsbjwt.presentation.dto.SignupDTO;
 import com.lacouf.rsbjwt.service.UserService;
 import com.lacouf.rsbjwt.service.dto.UserDTO;
 import com.lacouf.rsbjwt.service.exceptions.BadInputException;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class StudentController {
 
     @PostMapping("/register/student")
     @CrossOrigin( origins = "http://localhost:3000")
-    public ResponseEntity<UserDTO> createStudent(@RequestBody SignupDTO info) {
+    public ResponseEntity<UserDTO> createStudent(@Valid @RequestBody SignupDTO info) {
 
         try {
             var dto = userService.createStudent(
