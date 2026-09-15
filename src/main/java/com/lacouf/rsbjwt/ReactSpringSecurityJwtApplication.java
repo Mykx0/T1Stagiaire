@@ -15,12 +15,14 @@ public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
     // Edouard Lambert
     private final UserAppRepository userAppRepository;
     private final StudentRepository studentRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public ReactSpringSecurityJwtApplication( UserAppRepository userAppRepository, PasswordEncoder passwordEncoder, StudentRepository userRepository) {
+    public ReactSpringSecurityJwtApplication( UserAppRepository userAppRepository, PasswordEncoder passwordEncoder, StudentRepository studentRepository, UserRepository userRepository) {
         this.userAppRepository = userAppRepository;
         this.passwordEncoder = passwordEncoder;
-        this.studentRepository = userRepository;
+        this.studentRepository = studentRepository;
+        this.userRepository = userRepository;
     }
 
     public static void main(String[] args) {
@@ -29,7 +31,7 @@ public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        UserService userService = new UserService(studentRepository);
+        UserService userService = new UserService(studentRepository, userRepository);
         var student= userService.CreateStudent("Test","Test","Test@test.com", "test", Discipline.ComputerScience);
         IO.println(student.toString());
     }
