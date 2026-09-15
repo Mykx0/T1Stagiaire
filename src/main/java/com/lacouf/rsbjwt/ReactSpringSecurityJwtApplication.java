@@ -31,7 +31,7 @@ public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        UserService userService = new UserService(studentRepository, userRepository);
+        UserService userService = new UserService(studentRepository, userRepository, passwordEncoder);
         var student= userService.createStudent("Test","Test","Test@test.com", "test", Discipline.ComputerScience);
         IO.println(student.toString());
     }
