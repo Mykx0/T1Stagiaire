@@ -1,15 +1,20 @@
 import React, {useState} from 'react';
+import { useTranslation } from 'react-i18next';
 import FormInputs from "../FormInputs.jsx";
 
-const INPUTS = [
-    {id: 1, label: "Nom", type: "text", placeholder: "Votre nom", name: "nom"},
-    {id: 2, label: "Prénom", type: "text", placeholder: "Votre prénom", name: "prenom"},
-    {id: 3, label: "Numéro de matricule", type: "text", placeholder: "Votre matricule", name: "matricule"},
-    {id: 4, label:"Courriel", type: "email", placeholder: "vous@exemple.com", name: "courriel"},
-    {id: 5, label: "Mot de passe", type: "password", placeholder: "•••••", name: "motPasse"},
-    {id: 6, label: "Confirmer mot de passe", type: "password", placeholder: "•••••", name: "motPasseConfirmation"}
-];
+
 const RegisterPage = () => {
+    const { t } = useTranslation();
+
+    const INPUTS = [
+        {id: 1, label: t('register.inputs.lastName.label'), type: "text", placeholder: t('register.inputs.lastName.placeholder'), name: "nom"},
+        {id: 2, label: t('register.inputs.firstName.label'), type: "text", placeholder: t('register.inputs.firstName.placeholder'), name: "prenom"},
+        {id: 3, label: t('register.inputs.idNumber.label'), type: "text", placeholder: t('register.inputs.idNumber.placeholder'), name: "matricule"},
+        {id: 4, label: t('register.inputs.email.label'), type: "email", placeholder: t('register.inputs.email.placeholder'), name: "courriel"},
+        {id: 5, label: t('register.inputs.password.label'), type: "password", placeholder: "•••••", name: "motPasse"},
+        {id: 6, label: t('register.inputs.confirmPassword.label'), type: "password", placeholder: "•••••", name: "motPasseConfirmation"}
+    ];
+
     const [values, setValues] = useState({
         nom: '',
         prenom: '',
@@ -30,27 +35,27 @@ const RegisterPage = () => {
 
     const isValid = () => {
         if (!champsComplets()) {
-            setError('Veuillez remplir tous les champs');
+            setError('register.errors.allFieldsRequired');
             return false;
         }
         if(values.nom.length < 1 || values.prenom.length < 1){
-            setError('Le nom et le prénom doivent contenir au moins 1 caractère');
+            setError('register.errors.nameMinLength');
             return false;
         }
         if (!validateMatricule()){
-            setError('Le matricule doit contenir exactement 7 chiffres');
+            setError('register.errors.invalidMatricule');
             return false;
         }
         if (!validateEmail()){
-            setError('Veuillez entrer un courriel valide');
+            setError('register.errors.invalidEmail');
             return false;
         }
         if (values.motPasse.length < 8){
-            setError('Le mot de passe doit contenir au moins 8 caractères');
+            setError('register.errors.passwordMinLength');
             return false;
         }
         if (!motPasseCompatible()){
-            setError('Les mots de passe ne correspondent pas');
+            setError('register.errors.passwordMismatch');
             return false;
         }
         return true;
@@ -93,10 +98,10 @@ const RegisterPage = () => {
                 motPasse: '',
                 motPasseConfirmation: ''
             });
-            setSimulationResponse( 'Inscription réussie ! \nVous pouvez maintenant vous connecter. \nDonnées envoyées :' + JSON.stringify(data));
+            setSimulationResponse( `${t('register.successMessage')}\n${JSON.stringify(data)}`);
         }catch(e){
             setDisableButton(false);
-            setError('Une erreur est survenue lors de l\'inscription');
+            setError('register.errors.genericError');
         }finally {
             setDisableButton(false);
         }
@@ -107,8 +112,8 @@ const RegisterPage = () => {
         <div className="background">
             <div className={"form-body"}>
                 <div>
-                    <h1 className={"title"}>Créer un compte</h1>
-                    <p className="subtitle">Écrivez vos informations pour s'inscrire</p>
+                    <h1 className={"title"}>{t('register.title')}</h1>
+                    <p className="subtitle">{t('register.subtitle')}</p>
                 </div>
                 <form onSubmit={handleRegister}
                       className="forms-style">
@@ -123,12 +128,12 @@ const RegisterPage = () => {
                             label={input.label}
                       />
                     ))}
-                    {error && <p className="error">{error}</p>}
+                    {error && <p className="error">{t(error)}</p>}
                     {simulationResponse && <p className="simulationResponse">{simulationResponse}</p>}
                     <button type="submit"
                             className={`${disableButton ? 'btn-disabled' : 'btn-active'} btn`}
                             disabled={disableButton}>
-                        {disableButton ? 'Inscription en cours...' : 'S\'inscrire'}
+                        {disableButton ? t('register.submitting') : t('register.submitButton')}
                     </button>
                 </form>
             </div>
