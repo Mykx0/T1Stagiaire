@@ -3,7 +3,6 @@ package com.lacouf.rsbjwt.presentation;
 import com.lacouf.rsbjwt.presentation.dto.SignupDTO;
 import com.lacouf.rsbjwt.service.UserService;
 import com.lacouf.rsbjwt.service.dto.UserDTO;
-import com.lacouf.rsbjwt.service.exceptions.BadInputException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,18 +20,13 @@ public class StudentController {
     @PostMapping("/register/student")
     @CrossOrigin( origins = "http://localhost:3000")
     public ResponseEntity<UserDTO> createStudent(@Valid @RequestBody SignupDTO info) {
-
-        try {
-            var dto = userService.createStudent(
+        userService.createStudent(
                     info.firstName(),
                     info.lastName(),
                     info.email(),
                     info.password(),
                     info.discipline()
-            );
-        } catch (BadInputException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        );
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
