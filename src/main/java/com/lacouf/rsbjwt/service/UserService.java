@@ -1,5 +1,6 @@
 package com.lacouf.rsbjwt.service;
 
+import com.lacouf.rsbjwt.model.Discipline;
 import com.lacouf.rsbjwt.model.Student;
 import com.lacouf.rsbjwt.repository.StudentRepository;
 import com.lacouf.rsbjwt.service.dto.UserDTO;
@@ -13,8 +14,8 @@ public class UserService {
         this.studentRepo = studentRepo;
     }
 
-    public UserDTO CreateStudent(String firstName, String lastName, String email, String password) {
-        var student = studentRepo.save(new Student(firstName, lastName, email, password));
+    public UserDTO CreateStudent(String firstName, String lastName, String email, String password, Discipline discipline) {
+        var student = studentRepo.save(new Student(firstName, lastName, email, password, discipline));
         return new UserDTO(student);
     }
     public UserDTO GetUser (long id) {

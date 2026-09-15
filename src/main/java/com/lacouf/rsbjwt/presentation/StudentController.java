@@ -24,7 +24,8 @@ public class StudentController {
                 info.firstName(),
                 info.lastName(),
                 info.email(),
-                info.password()
+                info.password(),
+                info.discipline()
         );
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

@@ -1,5 +1,6 @@
 package com.lacouf.rsbjwt;
 
+import com.lacouf.rsbjwt.model.Discipline;
 import com.lacouf.rsbjwt.repository.StudentRepository;
 import com.lacouf.rsbjwt.repository.UserAppRepository;
 import com.lacouf.rsbjwt.repository.UserRepository;
@@ -29,7 +30,7 @@ public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         UserService userService = new UserService(studentRepository);
-        var student= userService.CreateStudent("Test","Test","Test@test.com", "test");
+        var student= userService.CreateStudent("Test","Test","Test@test.com", "test", Discipline.ComputerScience);
         IO.println(student.toString());
     }
 }
