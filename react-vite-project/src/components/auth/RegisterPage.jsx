@@ -9,16 +9,14 @@ const RegisterPage = () => {
     const INPUTS = [
         {id: 1, label: t('register.inputs.lastName.label'), type: "text", placeholder: t('register.inputs.lastName.placeholder'), name: "nom"},
         {id: 2, label: t('register.inputs.firstName.label'), type: "text", placeholder: t('register.inputs.firstName.placeholder'), name: "prenom"},
-        {id: 3, label: t('register.inputs.idNumber.label'), type: "text", placeholder: t('register.inputs.idNumber.placeholder'), name: "matricule"},
-        {id: 4, label: t('register.inputs.email.label'), type: "email", placeholder: t('register.inputs.email.placeholder'), name: "courriel"},
-        {id: 5, label: t('register.inputs.password.label'), type: "password", placeholder: "•••••", name: "motPasse"},
-        {id: 6, label: t('register.inputs.confirmPassword.label'), type: "password", placeholder: "•••••", name: "motPasseConfirmation"}
+        {id: 3, label: t('register.inputs.email.label'), type: "email", placeholder: t('register.inputs.email.placeholder'), name: "courriel"},
+        {id: 4, label: t('register.inputs.password.label'), type: "password", placeholder: "•••••", name: "motPasse"},
+        {id: 5, label: t('register.inputs.confirmPassword.label'), type: "password", placeholder: "•••••", name: "motPasseConfirmation"}
     ];
 
     const [values, setValues] = useState({
         nom: '',
         prenom: '',
-        matricule: '',
         courriel: '',
         motPasse: '',
         motPasseConfirmation: ''
@@ -42,10 +40,6 @@ const RegisterPage = () => {
             setError('register.errors.nameMinLength');
             return false;
         }
-        if (!validateMatricule()){
-            setError('register.errors.invalidMatricule');
-            return false;
-        }
         if (!validateEmail()){
             setError('register.errors.invalidEmail');
             return false;
@@ -62,10 +56,6 @@ const RegisterPage = () => {
     };
     const champsComplets = () => {
         return values.nom !== '' && values.prenom !== '' && values.matricule !== '' && values.courriel !== '' && values.motPasse !== '' && values.motPasseConfirmation !== '';
-    }
-    const validateMatricule = () => {
-        const matriculeRegex = /^\d{7}$/
-        return matriculeRegex.test(values.matricule);
     }
     const validateEmail = () => {
         const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -84,7 +74,6 @@ const RegisterPage = () => {
             const data = {
                 nom: values.nom,
                 prenom: values.prenom,
-                matricule: values.matricule,
                 courriel: values.courriel,
                 motPasse: values.motPasse
             };
@@ -93,7 +82,6 @@ const RegisterPage = () => {
             setValues({
                 nom: '',
                 prenom: '',
-                matricule: '',
                 courriel: '',
                 motPasse: '',
                 motPasseConfirmation: ''
@@ -109,11 +97,11 @@ const RegisterPage = () => {
 
 
     return (
-        <div className="background">
-            <div className={"form-body"}>
-                <div>
-                    <h1 className={"title"}>{t('register.title')}</h1>
-                    <p className="subtitle">{t('register.subtitle')}</p>
+
+            <div>
+                <div className="text-center">
+                    <h1 className="title">{t('register.title')}</h1>
+                    <p className="subtitle pb-6">{t('register.subtitle')}</p>
                 </div>
                 <form onSubmit={handleRegister}
                       className="forms-style">
@@ -137,7 +125,7 @@ const RegisterPage = () => {
                     </button>
                 </form>
             </div>
-        </div>
+
     );
 };
 
