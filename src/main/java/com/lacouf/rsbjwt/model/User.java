@@ -46,6 +46,10 @@ public abstract class User {
         return credentials.getEmail();
     }
 
+    public String getPassword() {
+        return credentials.getPassword();
+    }
+
     @Override
     public String toString() {
         return "User{" +
