@@ -17,4 +17,7 @@ public class UserService {
         var student = studentRepo.save(new Student(firstName, lastName, email, password));
         return new UserDTO(student);
     }
+    public UserDTO GetUser (long id) {
+        return new UserDTO(studentRepo.getReferenceById(id));
+    }
 }
