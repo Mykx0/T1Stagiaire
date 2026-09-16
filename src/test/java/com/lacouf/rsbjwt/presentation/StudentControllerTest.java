@@ -58,4 +58,26 @@ public class StudentControllerTest {
         verify(userService).createStudent(dto.firstName(), dto.lastName(), dto.email(), dto.password(), dto.discipline());
     }
 
+    @Test
+    public void unsuccessfulStudentCreation() throws Exception {
+        String signup =
+                """
+                {
+                    "firstName": "",
+                    "lastName": "Lambert",
+                    "email": "asdasd@gmail.com",
+                    "password": "password",
+                    "discipline": "ComputerScience"
+                }
+                """;
+
+        this.mockMvc
+                .perform(
+                        post("/api/register/student")
+                                .with(csrf())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(signup)
+                ).
+                andExpect(status().is4xxClientError());
+    }
 }
