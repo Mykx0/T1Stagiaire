@@ -20,14 +20,14 @@ public class StudentController {
     @PostMapping("/register/student")
     @CrossOrigin( origins = "http://localhost:3000")
     public ResponseEntity<UserDTO> createStudent(@Valid @RequestBody SignupDTO info) {
-        userService.createStudent(
+        var dto = userService.createStudent(
                     info.firstName(),
                     info.lastName(),
                     info.email(),
                     info.password(),
                     info.discipline()
         );
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     @GetMapping("/{id}")
