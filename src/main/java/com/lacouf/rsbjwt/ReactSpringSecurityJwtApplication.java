@@ -13,16 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @SpringBootApplication
 public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
     // Edouard Lambert
-    private final UserAppRepository userAppRepository;
-    private final StudentRepository studentRepository;
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    public ReactSpringSecurityJwtApplication() {
 
-    public ReactSpringSecurityJwtApplication( UserAppRepository userAppRepository, PasswordEncoder passwordEncoder, StudentRepository studentRepository, UserRepository userRepository) {
-        this.userAppRepository = userAppRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.studentRepository = studentRepository;
-        this.userRepository = userRepository;
     }
 
     public static void main(String[] args) {
@@ -31,8 +23,6 @@ public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        UserService userService = new UserService(studentRepository, userRepository, passwordEncoder);
-        var student= userService.createStudent("Test","Test","Test@test.com", "test", Discipline.ComputerScience);
-        IO.println(student.toString());
+
     }
 }
