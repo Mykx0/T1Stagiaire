@@ -103,4 +103,27 @@ public class StudentControllerTest {
                 ).
                 andExpect(status().is4xxClientError());
     }
+
+    @Test
+    public void emailNotCorrectUnsuccessfulStudentCreation() throws Exception{
+        String signup =
+                """
+                {
+                    "firstName": "Edouard",
+                    "lastName": "Lambert",
+                    "email": "asdasd@",
+                    "password": "password",
+                    "discipline": "ComputerScience"
+                }
+                """;
+
+        this.mockMvc
+                .perform(
+                        post("/api/register/student")
+                                .with(csrf())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(signup)
+                ).
+                andExpect(status().is4xxClientError());
+    }
 }
