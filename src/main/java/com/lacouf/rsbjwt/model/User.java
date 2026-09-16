@@ -3,6 +3,9 @@ package com.lacouf.rsbjwt.model;
 import com.lacouf.rsbjwt.model.auth.Credentials;
 import com.lacouf.rsbjwt.model.auth.Role;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.Collection;
 
 
 @Entity
@@ -48,6 +51,10 @@ public abstract class User {
 
     public String getPassword() {
         return credentials.getPassword();
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return credentials.getAuthorities();
     }
 
     @Override
