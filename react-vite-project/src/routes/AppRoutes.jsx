@@ -1,12 +1,12 @@
 import React from 'react';
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
-import RegisterPage from "../components/auth/RegisterPage.jsx";
+import RoleSelectionForm from "../components/auth/RoleSelectionForm.jsx";
 
 const AppRoutes = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path={"/register"} element={<RegisterPage />} />
+                <Route path={"/register"} element={<RoleSelectionForm />} />
                 <Route path={"*"} element={<Navigate to={"/register"} replace/>}/>
             </Routes>
         </BrowserRouter>

@@ -2,7 +2,7 @@
   "register": {
     "title": "Créer un compte",
     "subtitle": "Écrivez vos informations pour s'inscrire",
-    "submitButton": "S'inscrire",
+    "submitButton": "S'inscrire comme étudiant",
     "submitting": "Inscription en cours...",
     "successMessage": "Inscription réussie ! Vous pouvez maintenant vous connecter.\nDonnées envoyées :",
     "inputs": {
@@ -13,10 +13,6 @@
       "firstName": {
         "label": "Prénom",
         "placeholder": "Votre prénom"
-      },
-      "idNumber": {
-        "label": "Numéro de matricule",
-        "placeholder": "Votre matricule"
       },
       "email": {
         "label": "Courriel",
@@ -38,5 +34,24 @@
       "passwordMismatch": "Les mots de passe ne correspondent pas",
       "genericError": "Une erreur est survenue lors de l'inscription"
     }
+  },
+   "roles": {
+    "student": {
+      "title": "Étudiant",
+      "description": "Trouver des offres de stage"
+    },
+    "teacher": {
+      "title": "Enseignant",
+      "description": "Gérez vos étudiants"
+    },
+    "employer": {
+      "title": "Employeur",
+      "description": "Publiez des offres et recrutez"
+    }
+  },
+  "roleSelection": {
+    "title": "Choisissez votre profil",
+    "subtitle": "Sélectionnez votre profil pour afficher le formulaire d'inscription correspondant",
+    "backButton": "Changer de rôle"
   }
 }

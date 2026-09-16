@@ -14,10 +14,6 @@
         "label": "First name",
         "placeholder": "Your first name"
       },
-      "idNumber": {
-        "label": "ID Number",
-        "placeholder": "Your ID number"
-      },
       "email": {
         "label": "Email",
         "placeholder": "you@example.com"
@@ -38,5 +34,24 @@
       "passwordMismatch": "Passwords do not match",
       "genericError": "An error occurred during registration"
     }
+  },
+  "roles": {
+    "student": {
+      "title": "Student",
+      "description": "Find internship opportunities"
+    },
+    "teacher": {
+      "title": "Teacher",
+      "description": "Manage your students"
+    },
+    "employer": {
+      "title": "Employer",
+      "description": "Post job offers and recruit"
+    }
+  },
+  "roleSelection": {
+      "title": "Choose your profile",
+      "subtitle": "Select your profile to display the corresponding registration form",
+      "backButton": "Change role"
   }
 }
