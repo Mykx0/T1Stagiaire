@@ -2,9 +2,11 @@ package com.lacouf.rsbjwt.service;
 
 import com.lacouf.rsbjwt.model.Discipline;
 import com.lacouf.rsbjwt.model.Student;
+import com.lacouf.rsbjwt.model.User;
 import com.lacouf.rsbjwt.repository.StudentRepository;
 import com.lacouf.rsbjwt.repository.UserRepository;
 import com.lacouf.rsbjwt.service.dto.UserDTO;
+import jakarta.validation.constraints.Email;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +26,15 @@ public class UserService {
         return new UserDTO(userRepo.getReferenceById(id));
     }
 
+    public UserDTO getUserWithEmail(@Email String email) {
+        return userRepo.findUserAppByEmail(email)
+                .map(UserDTO::new)
+                .orElse(null);
+    }
+
     // Student specific methods
     public UserDTO createStudent(String firstName, String lastName, String email, String password, Discipline discipline) {
         var student = studentRepo.save(new Student(firstName, lastName, email, encoder.encode(password), discipline));
         return new UserDTO(student);
     }
-
 }
