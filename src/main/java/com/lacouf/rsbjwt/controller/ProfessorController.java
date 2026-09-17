@@ -1,40 +1,104 @@
 package com.lacouf.rsbjwt.controller;
 
-import com.lacouf.rsbjwt.service.UserAppService;
+import com.lacouf.rsbjwt.security.exception.EmailAlreadyUsedException;
+import com.lacouf.rsbjwt.security.exception.ProfessorNotFoundException;
+import com.lacouf.rsbjwt.service.ProfService;
 import com.lacouf.rsbjwt.service.dto.ProfessorDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/professor")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ProfessorController {
 
-    private final UserAppService userAppService;
+    private final ProfService profService;
 
-    public ProfessorController(UserAppService userAppService) {
-        this.userAppService = userAppService;
+    public ProfessorController(ProfService userService) {
+        this.profService = userService;
     }
 
-    @PostMapping("/register//professor")
-    public ResponseEntity<ProfessorDTO> register(@RequestBody ProfessorDTO professorDTO) {
-        ProfessorDTO response = userAppService.registerProfessor(professorDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody ProfessorDTO professorDTO) {
+        try {
+            ProfessorDTO response = profService.registerProfessor(professorDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (EmailAlreadyUsedException e) {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body(Map.of("error", "Email already used", "message", e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Invalid input", "message", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Internal error", "message", e.getMessage()));
+        }
     }
 
-    // GET /api/professor/{profId}/email
     @GetMapping("/{profId}/email")
-    public ResponseEntity<String> getEmailById(@PathVariable Long profId) {
-        return ResponseEntity.ok(userAppService.getProfessorEmailById(profId));
+    public ResponseEntity<?> getEmailById(@PathVariable Long profId) {
+        try {
+            return ResponseEntity.ok(profService.getProfessorEmailById(profId));
+        } catch (ProfessorNotFoundException e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Professor not found", "message", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Internal error", "message", e.getMessage()));
+        }
     }
 
-    // GET /api/professor/email
     @GetMapping("/email")
-    public ResponseEntity<String> getEmailByName(
+    public ResponseEntity<?> getEmailByName(
             @RequestParam String firstName,
             @RequestParam String lastName
     ) {
-        return ResponseEntity.ok(userAppService.getProfessorEmailByName(firstName, lastName));
+        try {
+            return ResponseEntity.ok(profService.getProfessorEmailByName(firstName, lastName));
+        } catch (ProfessorNotFoundException e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Professor not found", "message", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Internal error", "message", e.getMessage()));
+        }
     }
 
+    // PUT /api/professor/{profId}
+    @PutMapping("/{profId}")
+    public ResponseEntity<?> updateProfProfil(
+            @PathVariable Long profId,
+            @RequestBody ProfessorDTO professorDTO
+    ) {
+        try {
+            ProfessorDTO response = profService.updateProfessor(profId, professorDTO);
+            return ResponseEntity.ok(response);
+        } catch (ProfessorNotFoundException e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Professor not found", "message", e.getMessage()));
+        } catch (EmailAlreadyUsedException e) {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body(Map.of("error", "Email already used", "message", e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Invalid input", "message", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Internal error", "message", e.getMessage()));
+        }
+    }
 }

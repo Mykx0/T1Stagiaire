@@ -1,6 +1,6 @@
 package com.lacouf.rsbjwt;
 
-import com.lacouf.rsbjwt.service.UserAppService;
+import com.lacouf.rsbjwt.service.ProfService;
 import com.lacouf.rsbjwt.service.dto.ProfessorDTO;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -9,10 +9,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
 
-    private final UserAppService userAppService;
+    private final ProfService userService;
 
-    public ReactSpringSecurityJwtApplication(UserAppService userAppService) {
-        this.userAppService = userAppService;
+    public ReactSpringSecurityJwtApplication(ProfService userService) {
+        this.userService = userService;
     }
 
     public static void main(String[] args) {
@@ -30,7 +30,6 @@ public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
 
     private void seedProfessor(String firstName, String lastName, String email,
                                String rawPassword, String discipline) {
-
         ProfessorDTO dto = new ProfessorDTO();
         dto.setFirstName(firstName);
         dto.setLastName(lastName);
@@ -39,7 +38,7 @@ public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
         dto.setDiscipline(discipline);
 
         try {
-            ProfessorDTO saved = userAppService.registerProfessor(dto);
+            ProfessorDTO saved = userService.registerProfessor(dto);
             System.out.println("Professor created: " + saved.getEmail());
         } catch (Exception e) {
             System.out.println("Professor already exists or error: "
