@@ -111,7 +111,7 @@ body::before {
 }
 
 .labels {
-    @apply absolute -mt-3 ms-3 px-1 font-medium text-sm
+    @apply absolute -mt-3 ms-3 px-1 font-medium text-sm z-2
     bg-white text-kingfisher-daisy-700;
 }
 
