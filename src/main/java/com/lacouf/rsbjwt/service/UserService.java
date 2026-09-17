@@ -56,7 +56,7 @@ public class UserService {
 
     // Student specific methods
     public UserDTO createStudent(String firstName, String lastName, String email, String password, Discipline discipline) {
-        var student = studentRepo.save(new Student(firstName, lastName, email, encoder.encode(password), discipline));
+        Student student = studentRepo.save(new Student(firstName, lastName, email, encoder.encode(password), discipline));
         return new UserDTO(student);
     }
 }
