@@ -5,6 +5,10 @@
     "submitButton": "S'inscrire comme étudiant",
     "submitting": "Inscription en cours...",
     "successMessage": "Inscription réussie ! Vous pouvez maintenant vous connecter.\nDonnées envoyées :",
+    "acceptTerms": {
+      "label": "Acceptez les",
+      "linkText": "termes et conditions"
+    },
     "inputs": {
       "lastName": {
         "label": "Nom",

@@ -130,10 +130,10 @@ const RegisterPage = ({role}) => {
                     <div className="space-x-1">
                     <input type="checkbox" id="terms" name="terms" required />
                         <label htmlFor="terms">
-                            Acceptez les
+                            {t("register.acceptTerms.label")}
                         </label>
                         <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                            termes et conditions
+                            {t("register.acceptTerms.linkText")}
                         </a>
                     </div>
 
