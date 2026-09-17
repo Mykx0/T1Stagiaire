@@ -8,14 +8,32 @@ import {COMMON_INPUTS, ROLE_CONFIG} from "./constants.js";
 const RegisterPage = ({role}) => {
     const { t } = useTranslation();
 
+    const DisciplineLabels = {
+        ComputerScience: t('register.discipline.computerScience'),
+        Nursing: t('register.discipline.nursing'),
+        ElectricalEngineering: t('register.discipline.electricalEngineering')
+    };
+
     const currentConfig = ROLE_CONFIG[role];
-    const ACTIVE_INPUTS = [...COMMON_INPUTS, ...currentConfig?.extraInputs];
+
+    const ACTIVE_INPUTS = [...COMMON_INPUTS, ...(currentConfig?.extraInputs || [])].map(input => {
+        if (input.type === 'select' && input.optionKeys) {
+            return {
+                ...input,
+                options: input.optionKeys.map(key => ({
+                    value: key,
+                    label: DisciplineLabels[key] ?? key
+                }))
+            };
+        }
+        return input;
+    });
 
     const getInitialValues = () => {
         const initial = {};
         ACTIVE_INPUTS.forEach(input => {
             initial[input.name] = input.type === 'select' && input.options
-                ? input.options[0]
+                ? input.options[0].value
                 : '';
         });
         return initial;

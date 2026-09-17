@@ -16,7 +16,7 @@ export const ROLE_CONFIG={
     student:{
         endpoint: '/register/student',
         extraInputs:[
-            {id: 5, label: 'register.inputs.discipline.label', type: "select", placeholder: 'register.inputs.discipline.placeholder', name: "discipline", options: Object.values(Discipline)},
+            {id: 5, label: 'register.inputs.discipline.label', type: "select", placeholder: 'register.inputs.discipline.placeholder', name: "discipline", optionKeys: Object.values(Discipline)},
         ]
     },
     teacher:{
