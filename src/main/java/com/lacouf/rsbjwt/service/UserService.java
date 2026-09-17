@@ -32,7 +32,7 @@ public class UserService {
     }
     // Generic user methods
     public UserDTO getUser(long id) {
-        return new UserDTO(userRepo.getReferenceById(id));
+        return new UserDTO(userRepo.findById(id).orElseThrow(UserNotFoundException::new));
     }
 
     public boolean isEmailUsed(String email) {
