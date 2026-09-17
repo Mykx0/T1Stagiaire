@@ -53,6 +53,7 @@ public class SecurityConfiguration {
     private static final String PREPOSE_PATH = "/prepose/**";
     private static final String GESTIONNAIRE_PATH = "/gestionnaire/**";
     private static final String STUDENT_CREATE_PATH = "/api/register/student";
+    private static final String USER_EMAIL_CHECK_PATH = "/api/user/checkEmail";
 
 
 
@@ -66,6 +67,7 @@ public class SecurityConfiguration {
                         .requestMatchers(POST, EMPRUNTEUR_REGISTER_PATH).permitAll()
                         .requestMatchers(POST, PREPOSE_REGISTER_PATH).permitAll()
                         .requestMatchers(POST, STUDENT_CREATE_PATH).permitAll()
+                        .requestMatchers(GET, USER_EMAIL_CHECK_PATH).permitAll()
 //                        .requestMatchers(GET, "/api/user/student/**").permitAll() Pour tester. Ne pas garder en prod
                         .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll() // Allow CORS preflight requests
                         .requestMatchers(H2_CONSOLE_PATH).permitAll() // Allow H2 console access

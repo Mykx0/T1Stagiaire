@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@tailwind utilities;
 
 @theme{
     /*base colors*/
@@ -27,38 +26,28 @@
     --color-chrome-white-800: #415222;
     --color-chrome-white-900: #384621;
     --color-chrome-white-950: #1c260d;
+
+    --background-image-dot-pattern: radial-gradient(var(--color-kingfisher-daisy-50) 1.5px, transparent 1.5px),
+    radial-gradient(var(--color-kingfisher-daisy-50) 1.5px, var(--color-kingfisher-daisy-600) 1.5px);
 }
 
-body {
-    min-height: 100vh;
-    position: relative;
-}
+@layer base {
+    body {
+        @apply min-h-screen relative;
+    }
 
-body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;
+    body::before {
+        content: "";
+        @apply fixed top-0 left-0 w-screen h-screen -z-10
+        bg-dot-pattern bg-kingfisher-daisy-50/80;
 
-    /* Utilisation des teintes mauves du thème */
-    background-color: var(--color-kingfisher-daisy-50);
-    opacity: 0.8;
-    background-image:
-            radial-gradient(var(--color-kingfisher-daisy-50) 1.5px, transparent 1.5px),
-            radial-gradient(var(--color-kingfisher-daisy-50) 1.5px, var(--color-kingfisher-daisy-600) 1.5px);
-    background-size: 20px 20px;
-    background-position: 0 0, 10px 10px;
+        background-size: 20px 20px;
+        background-position: 0 0, 10px 10px;
 
-    /* Masque d'estompement */
-    mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 75%);
-    -webkit-mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 75%);
-    mask-size: 100% 100%;
-    -webkit-mask-size: 100% 100%;
-    mask-repeat: no-repeat;
-    -webkit-mask-repeat: no-repeat;
+        mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 75%);
+        mask-size: 100% 100%;
+        mask-repeat: no-repeat;
+    }
 }
 
 .title {
@@ -117,7 +106,7 @@ body::before {
 
 .inputs {
     @apply rounded-md px-3 py-2 shadow-sm outline-none transition-all w-full border focus:ring-2 focus:ring-offset-0
-    border-gray-200 bg-white text-gray-800 placeholder:text-gray-400 focus:border-kingfisher-daisy-500 focus:ring-kingfisher-daisy-200;
+    border-gray-200 bg-white placeholder:text-gray-400 focus:border-kingfisher-daisy-500 focus:ring-kingfisher-daisy-200;
 }
 
 .error {
