@@ -13,6 +13,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/professor")
 @CrossOrigin(origins = "http://localhost:5173")
+// Notre Front-End est sur le 3000. Il va falloir que tu changes l'origine
 public class ProfessorController {
 
     private final ProfService profService;
@@ -22,6 +23,8 @@ public class ProfessorController {
     }
 
     @PostMapping("/register")
+    // On s'est mis d'accord sur le fait que nos path de register seraient /api/register/[?]
+    // Dans ton cas, c'est /api/professor/register.
     public ResponseEntity<?> register(@RequestBody ProfessorDTO professorDTO) {
         try {
             ProfessorDTO response = profService.registerProfessor(professorDTO);
@@ -39,6 +42,9 @@ public class ProfessorController {
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Internal error", "message", e.getMessage()));
         }
+        // Je trouve que le mapping des exceptions est une très bonne idée,
+        // mais je trouve que tu te répètes beaucoup quand tu fais :
+        // Map.of("error" ... ). Une alternative que je propose est de faire un objet ErrorResponse qui, avec un constructeur, fait ça automatiquement
     }
 
     @GetMapping("/{profId}/email")
@@ -54,6 +60,11 @@ public class ProfessorController {
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Internal error", "message", e.getMessage()));
         }
+        // L'idée est correct, sauf que :
+        // A) je ne comprends pas l'utilité
+        // B) ça permet à quelqu'un de faire une attaque par dictionaire.
+        // Quelqu'un pourrait se faire plaisir et checker l'email de tout le monde
+
     }
 
     @GetMapping("/email")
