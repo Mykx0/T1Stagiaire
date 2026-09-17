@@ -1,7 +1,7 @@
 package com.lacouf.rsbjwt.security;
 
-import com.lacouf.rsbjwt.repository.UserAppRepository;
-import com.lacouf.rsbjwt.model.UserApp;
+import com.lacouf.rsbjwt.model.User;
+import com.lacouf.rsbjwt.repository.UserRepository;
 import com.lacouf.rsbjwt.security.exception.AuthenticationException;
 import com.lacouf.rsbjwt.security.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -15,16 +15,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthProvider implements AuthenticationProvider{
 	private final PasswordEncoder passwordEncoder;
-	private final UserAppRepository userAppRepository;
+	private final UserRepository userRepository;
 
-	public AuthProvider(PasswordEncoder passwordEncoder, UserAppRepository userAppRepository) {
+	public AuthProvider(PasswordEncoder passwordEncoder, UserRepository userRepository) {
 		this.passwordEncoder = passwordEncoder;
-		this.userAppRepository = userAppRepository;
+		this.userRepository = userRepository;
 	}
 
 	@Override
 	public Authentication authenticate(Authentication authentication) {
-		UserApp user = loadUserByEmail(authentication.getPrincipal().toString());
+		User user = loadUserByEmail(authentication.getPrincipal().toString());
 		validateAuthentication(authentication, user);
 		return new UsernamePasswordAuthenticationToken(
 			user.getEmail(),
@@ -38,12 +38,12 @@ public class AuthProvider implements AuthenticationProvider{
 		return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
 	}
 
-	private UserApp loadUserByEmail(String email) throws UsernameNotFoundException{
-		return userAppRepository.findUserAppByEmail(email)
+	private User loadUserByEmail(String email) throws UsernameNotFoundException{
+		return userRepository.findUserAppByEmail(email)
 			.orElseThrow(UserNotFoundException::new);
 	}
 
-	private void validateAuthentication(Authentication authentication, UserApp user){
+	private void validateAuthentication(Authentication authentication, User user){
 		if(!passwordEncoder.matches(authentication.getCredentials().toString(), user.getPassword()))
 			throw new AuthenticationException(HttpStatus.FORBIDDEN, "Incorrect username or password");
 	}

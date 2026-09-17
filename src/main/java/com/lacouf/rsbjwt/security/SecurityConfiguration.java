@@ -1,7 +1,7 @@
 package com.lacouf.rsbjwt.security;
 
 import com.lacouf.rsbjwt.model.auth.Role;
-import com.lacouf.rsbjwt.repository.UserAppRepository;
+import com.lacouf.rsbjwt.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -35,10 +35,10 @@ import static org.springframework.http.HttpMethod.*;
 public class SecurityConfiguration {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserAppRepository userRepository;
+    private final UserRepository userRepository;
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
 
-    public SecurityConfiguration(JwtTokenProvider jwtTokenProvider, UserAppRepository userRepository, JwtAuthenticationEntryPoint authenticationEntryPoint) {
+    public SecurityConfiguration(JwtTokenProvider jwtTokenProvider, UserRepository userRepository, JwtAuthenticationEntryPoint authenticationEntryPoint) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = userRepository;
         this.authenticationEntryPoint = authenticationEntryPoint;
