@@ -5,7 +5,6 @@ import com.lacouf.rsbjwt.model.Student;
 import com.lacouf.rsbjwt.repository.StudentRepository;
 import com.lacouf.rsbjwt.repository.UserRepository;
 import com.lacouf.rsbjwt.service.dto.UserDTO;
-import jakarta.validation.constraints.Email;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +24,8 @@ public class UserService {
         return new UserDTO(userRepo.getReferenceById(id));
     }
 
-    public UserDTO getUserWithEmail(@Email String email) {
-        return userRepo.findUserAppByEmail(email)
-                .map(UserDTO::new)
-                .orElse(null);
+    public boolean isEmailUsed(String email) {
+        return userRepo.findUserAppByEmail(email).isPresent();
     }
 
     // Student specific methods

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -23,10 +24,10 @@ public class UserController {
         return ResponseEntity.ok(userService.getUser(id));
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<UserDTO> getUserWithEmail(@Email @RequestBody String email) {
-        var dto = userService.getUserWithEmail(email);
-        return ResponseEntity.ok(dto);
+    @GetMapping("/user/checkEmail")
+    public ResponseEntity<Boolean> isEmailUsed(@Email @RequestParam String email) {
+        boolean isUsed = userService.isEmailUsed(email);
+        return ResponseEntity.ok(isUsed);
     }
 
     @PostMapping("/register/student")
