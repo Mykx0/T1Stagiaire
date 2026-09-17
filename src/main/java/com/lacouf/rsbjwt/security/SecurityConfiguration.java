@@ -31,27 +31,31 @@ import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity // Enables @PreAuthorize, @PostAuthorize, etc.
 public class SecurityConfiguration {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserAppRepository userRepository;
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
 
-    public SecurityConfiguration(JwtTokenProvider jwtTokenProvider,
-                                 UserAppRepository userRepository,
-                                 JwtAuthenticationEntryPoint authenticationEntryPoint) {
+    public SecurityConfiguration(JwtTokenProvider jwtTokenProvider, UserAppRepository userRepository, JwtAuthenticationEntryPoint authenticationEntryPoint) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = userRepository;
         this.authenticationEntryPoint = authenticationEntryPoint;
     }
 
-    private static final String H2_CONSOLE_PATH   = "/h2-console/**";
-    private static final String USER_LOGIN_PATH   = "/user/login";
-    private static final String PROF_REGISTER_PATH = "/api/register/prof";
-    private static final String PROF_PATH         = "/api/prof/**";
-    private static final String GESTIONNAIRE_PATH = "/api/gestionnaire/**";
-    private static final String PROF_GET_EMAIL_PATH = "/api/*/email";
+    private static final String H2_CONSOLE_PATH = "/h2-console/**";
+    private static final String USER_LOGIN_PATH = "/user/login";
+    private static final String EMPRUNTEUR_REGISTER_PATH = "/emprunteur/register";
+    private static final String PREPOSE_REGISTER_PATH = "/prepose/register";
+    private static final String USER_PATH = "/user/**";
+    private static final String EMPRUNTEUR_PATH = "/emprunteur/**";
+    private static final String PREPOSE_PATH = "/prepose/**";
+    private static final String GESTIONNAIRE_PATH = "/gestionnaire/**";
+    private static final String STUDENT_CREATE_PATH = "/api/register/student";
+    private static final String USER_EMAIL_CHECK_PATH = "/api/user/checkEmail";
+
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -60,19 +64,27 @@ public class SecurityConfiguration {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(POST, USER_LOGIN_PATH).permitAll()
-                        .requestMatchers(POST, PROF_REGISTER_PATH).permitAll()
-                        .requestMatchers(OPTIONS, "/**").permitAll()
-                        .requestMatchers(H2_CONSOLE_PATH).permitAll()
-                        .requestMatchers(PROF_PATH).permitAll()
-                        .requestMatchers(PROF_GET_EMAIL_PATH).permitAll()
-                        .requestMatchers(GESTIONNAIRE_PATH).hasAuthority(Role.GESTIONNAIRE.name())
+                        .requestMatchers(POST, EMPRUNTEUR_REGISTER_PATH).permitAll()
+                        .requestMatchers(POST, PREPOSE_REGISTER_PATH).permitAll()
+                        .requestMatchers(POST, STUDENT_CREATE_PATH).permitAll()
+                        .requestMatchers(GET, USER_EMAIL_CHECK_PATH).permitAll()
+//                        .requestMatchers(GET, "/api/user/student/**").permitAll() Pour tester. Ne pas garder en prod
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll() // Allow CORS preflight requests
+                        .requestMatchers(H2_CONSOLE_PATH).permitAll() // Allow H2 console access
 
-                        .anyRequest().authenticated()
+                        // Use Role enum names for authorities
+                        .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.EMPLOYER.name(), Role.PROFESSOR.name(), Role.INTERNSHIP_MANAGER.name())
+                        .requestMatchers(EMPRUNTEUR_PATH).hasAuthority(Role.EMPLOYER.name())
+                        .requestMatchers(PREPOSE_PATH).hasAuthority(Role.PROFESSOR.name())
+                        .requestMatchers(GESTIONNAIRE_PATH).hasAuthority(Role.INTERNSHIP_MANAGER.name())
+                        .anyRequest().authenticated() // Changed from denyAll() to authenticated() - more common, adjust if denyAll is strictly needed
                 )
-                .headers(headers -> headers.frameOptions(Customizer.withDefaults()).disable())
-                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .headers(headers -> headers.frameOptions(Customizer.withDefaults()).disable()) // for h2-console
+                .sessionManagement((secuManagement) -> {
+                    secuManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                })
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(c -> c.authenticationEntryPoint(authenticationEntryPoint));
+                .exceptionHandling(configurer -> configurer.authenticationEntryPoint(authenticationEntryPoint));
 
         return http.build();
     }
@@ -81,29 +93,43 @@ public class SecurityConfiguration {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of(
-                "http://localhost:3000" // CRA
-        ));
+        // 1. Specify allowed origins (VERY IMPORTANT!)
+        //    Must match your React app's URL exactly (e.g., http://localhost:3000)
+        //    Do NOT use "*" if you need credentials (like sending Authorization headers)
+        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // Adjust if your frontend runs elsewhere
 
+        // 2. Specify allowed HTTP methods
         configuration.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),
                 HttpMethod.PUT.name(),
                 HttpMethod.DELETE.name(),
-                HttpMethod.OPTIONS.name()
+                HttpMethod.OPTIONS.name() // Crucial for preflight requests
         ));
 
+        // 3. Specify allowed headers
+        //    Include standard headers and importantly "Authorization" for JWT,
+        //    and "Content-Type". Add any other custom headers your frontend sends.
         configuration.setAllowedHeaders(Arrays.asList(
                 "Authorization",
                 "Cache-Control",
                 "Content-Type",
                 "Accept",
-                "X-Requested-With"
+                "X-Requested-With",
+                "*"
+                // Add any other headers needed by your frontend
         ));
 
+        // 4. Allow credentials (cookies, Authorization headers)
+        //    Required if your frontend sends credentials.
         configuration.setAllowCredentials(true);
 
+        // 5. (Optional) Specify exposed headers
+        //    If your frontend needs to read headers from the response (e.g., a custom header)
+        // configuration.setExposedHeaders(List.of("Custom-Header"));
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        // Apply this configuration to all paths /**
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
@@ -122,12 +148,12 @@ public class SecurityConfiguration {
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration
-    ) throws Exception {
+    ) throws Exception{
         return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
-    PasswordEncoder passwordEncoder() {
+    PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 }

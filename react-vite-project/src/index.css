@@ -1,1 +1,115 @@
-body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+@import "tailwindcss";
+
+@theme{
+    /*base colors*/
+    --color-kingfisher-daisy-50: #f5f3ff;
+    --color-kingfisher-daisy-100: #ece8ff;
+    --color-kingfisher-daisy-200: #dbd5ff;
+    --color-kingfisher-daisy-300: #c1b3ff;
+    --color-kingfisher-daisy-400: #a288fd;
+    --color-kingfisher-daisy-500: #8558fa;
+    --color-kingfisher-daisy-600: #7536f1;
+    --color-kingfisher-daisy-700: #6724dd;
+    --color-kingfisher-daisy-800: #551dba;
+    --color-kingfisher-daisy-900: #42188c;
+    --color-kingfisher-daisy-950: #2b0e67;
+
+    /*secondary colors*/
+    --color-chrome-white-50: #f6f9ec;
+    --color-chrome-white-100: #ebf2d5;
+    --color-chrome-white-200: #d8e6b0;
+    --color-chrome-white-300: #bdd581;
+    --color-chrome-white-400: #a3c259;
+    --color-chrome-white-500: #85a73b;
+    --color-chrome-white-600: #67842c;
+    --color-chrome-white-700: #506625;
+    --color-chrome-white-800: #415222;
+    --color-chrome-white-900: #384621;
+    --color-chrome-white-950: #1c260d;
+
+    --background-image-dot-pattern: radial-gradient(var(--color-kingfisher-daisy-50) 1.5px, transparent 1.5px),
+    radial-gradient(var(--color-kingfisher-daisy-50) 1.5px, var(--color-kingfisher-daisy-600) 1.5px);
+}
+
+@layer base {
+    body {
+        @apply min-h-screen relative;
+    }
+
+    body::before {
+        content: "";
+        @apply fixed top-0 left-0 w-screen h-screen -z-10
+        bg-dot-pattern bg-kingfisher-daisy-50/80;
+
+        background-size: 20px 20px;
+        background-position: 0 0, 10px 10px;
+
+        mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 75%);
+        mask-size: 100% 100%;
+        mask-repeat: no-repeat;
+    }
+}
+
+.title {
+    @apply text-3xl font-bold text-black;
+}
+
+.subtitle {
+    @apply text-sm font-medium mt-2 text-gray-500;
+}
+
+.background {
+    @apply flex min-h-screen items-center justify-center px-4 py-12;
+}
+
+.btn {
+    @apply inline-flex items-center justify-center font-semibold rounded-md px-4 py-2 text-base
+    focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm;
+}
+
+.btn-disabled {
+    @apply bg-gray-200 text-gray-400 cursor-not-allowed;
+}
+
+.btn-active {
+    @apply text-white bg-kingfisher-daisy-600 hover:bg-kingfisher-daisy-700;
+}
+
+/*forms*/
+.form-body {
+    @apply w-md space-y-6 p-8 rounded-2xl border text-center
+    border-gray-100 bg-white shadow-xl;
+}
+
+.forms-style {
+    @apply grid gap-2;
+}
+
+.simulationResponse {
+    @apply text-sm p-2 rounded border whitespace-pre-wrap break-all wrap-break-word
+    text-kingfisher-daisy-800 bg-kingfisher-daisy-50 border-kingfisher-daisy-100;
+}
+
+/*inputs*/
+.btn-formEyes {
+    @apply h-full absolute right-3 top-1/2 -translate-y-1/2 font-semibold text-gray-400 hover:text-kingfisher-daisy-600;
+}
+
+.formInputs {
+    @apply w-full flex flex-col relative mb-3;
+}
+
+.labels {
+    @apply absolute -mt-3 ms-3 px-1 font-medium text-sm z-2
+    bg-white text-kingfisher-daisy-700;
+}
+
+.inputs {
+    @apply rounded-md px-3 py-2 shadow-sm outline-none transition-all w-full border focus:ring-2 focus:ring-offset-0
+    border-gray-200 bg-white placeholder:text-gray-400 focus:border-kingfisher-daisy-500 focus:ring-kingfisher-daisy-200;
+}
+
+.error {
+    @apply text-sm p-2 rounded border
+    text-red-600 bg-red-50 border-red-200;
+}

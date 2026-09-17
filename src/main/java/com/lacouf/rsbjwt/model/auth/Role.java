@@ -4,18 +4,20 @@ import java.util.HashSet;
 import java.util.Set;
 
 public enum Role{
-	GESTIONNAIRE("ROLE_GESTIONNAIRE"),
+	INTERNSHIP_MANAGER("ROLE_INTERNSHIP_MANAGER"),
 	PROFESSOR("ROLE_PROFESSOR"),
 	EMPLOYER("ROLE_EMPLOYER"),
-	STUDENT("ROLE_STUDENT");
+	STUDENT("ROLE_STUDENT")
+	;
 
 	private final String string;
 	private final Set<Role> managedRoles = new HashSet<>();
 
-	static {
-		GESTIONNAIRE.managedRoles.add(PROFESSOR);
-		GESTIONNAIRE.managedRoles.add(STUDENT);
+	static{
+		INTERNSHIP_MANAGER.managedRoles.add(PROFESSOR);
+		INTERNSHIP_MANAGER.managedRoles.add(STUDENT);
 	}
+
 	Role(String string){
 		this.string = string;
 	}

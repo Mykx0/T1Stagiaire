@@ -1,0 +1,65 @@
+{
+  "register": {
+    "title": "Créer un compte",
+    "subtitle": "Écrivez vos informations pour s'inscrire",
+    "submitButton": "S'inscrire comme étudiant",
+    "submitting": "Inscription en cours...",
+    "successMessage": "Inscription réussie ! Vous pouvez maintenant vous connecter.\nDonnées envoyées :",
+    "inputs": {
+      "lastName": {
+        "label": "Nom",
+        "placeholder": "Votre nom"
+      },
+      "firstName": {
+        "label": "Prénom",
+        "placeholder": "Votre prénom"
+      },
+      "email": {
+        "label": "Courriel",
+        "placeholder": "vous@exemple.com"
+      },
+      "discipline": {
+        "label": "Discipline"
+      },
+      "password": {
+        "label": "Mot de passe"
+      },
+      "confirmPassword": {
+        "label": "Confirmer mot de passe"
+      }
+    },
+    "errors": {
+      "allFieldsRequired": "Veuillez remplir tous les champs",
+      "nameMinLength": "Le nom et le prénom doivent contenir au moins 1 caractère",
+      "invalidMatricule": "Le matricule doit contenir exactement 7 chiffres",
+      "invalidEmail": "Veuillez entrer un courriel valide",
+      "passwordMinLength": "Le mot de passe doit contenir au moins 8 caractères",
+      "passwordMismatch": "Les mots de passe ne correspondent pas",
+      "genericError": "Une erreur est survenue lors de l'inscription"
+    },
+    "discipline": {
+      "computerScience": "Informatique",
+      "nursing": "Soins infirmiers",
+      "electricalEngineering": "Génie électrique"
+    }
+  },
+   "roles": {
+    "student": {
+      "title": "Étudiant",
+      "description": "Trouver des offres de stage"
+    },
+    "teacher": {
+      "title": "Professeur",
+      "description": "Gérez vos étudiants"
+    },
+    "employer": {
+      "title": "Employeur",
+      "description": "Publiez des offres et recrutez"
+    }
+  },
+  "roleSelection": {
+    "title": "Choisissez votre profil",
+    "subtitle": "Sélectionnez votre profil pour afficher le formulaire d'inscription correspondant",
+    "backButton": "Changer de rôle"
+  }
+}
