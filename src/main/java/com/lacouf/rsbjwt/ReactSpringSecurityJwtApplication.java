@@ -22,10 +22,10 @@ public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        seedProfessor("Jean", "Tremblay", "jean.tremblay@example.com", "password123", "Software Engineering");
-        seedProfessor("Marie", "Curie", "marie.curie@example.com", "password123", "Physics");
-        seedProfessor("Albert", "Einstein", "albert.einstein@example.com", "password123", "Physics");
-        seedProfessor("Ada", "Lovelace", "ada.lovelace@example.com", "password123", "Computer Science");
+        seedProfessor("Jean", "Tremblay", "jeantremblay@example.com", "password123", "Software Engineering");
+        seedProfessor("Marie", "Curie", "mariecurie@example.com", "password123", "Physics");
+        seedProfessor("Test", "Test", "testTest@example.com", "test123", "testing");
+        seedProfessor("Ada", "Lovelace", "adalovelace@example.com", "password123", "Computer Science");
     }
 
     private void seedProfessor(String firstName, String lastName, String email,

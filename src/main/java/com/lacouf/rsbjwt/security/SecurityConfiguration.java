@@ -51,6 +51,7 @@ public class SecurityConfiguration {
     private static final String PROF_REGISTER_PATH = "/api/professor/register";
     private static final String PROF_PATH         = "/api/professor/**";
     private static final String GESTIONNAIRE_PATH = "/api/gestionnaire/**";
+    private static final String PROF_GET_EMAIL_PATH = "/api/*/email";
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -62,9 +63,8 @@ public class SecurityConfiguration {
                         .requestMatchers(POST, PROF_REGISTER_PATH).permitAll()
                         .requestMatchers(OPTIONS, "/**").permitAll()
                         .requestMatchers(H2_CONSOLE_PATH).permitAll()
-                        // IMPORTANT: register must be BEFORE /api/professor/**,
-                        // which is already the case here.
-                        .requestMatchers(PROF_PATH).hasAuthority(Role.PROFESSOR.name())
+                        .requestMatchers(PROF_PATH).permitAll()
+                        .requestMatchers(PROF_GET_EMAIL_PATH).permitAll()
                         .requestMatchers(GESTIONNAIRE_PATH).hasAuthority(Role.GESTIONNAIRE.name())
 
                         .anyRequest().authenticated()

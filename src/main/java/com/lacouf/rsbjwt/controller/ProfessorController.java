@@ -74,8 +74,8 @@ public class ProfessorController {
         }
     }
 
-    // PUT /api/professor/{profId}
-    @PutMapping("/{profId}")
+    // PUT /api/professor/updateProfil/{profId}
+    @PutMapping("updateProfil/{profId}")
     public ResponseEntity<?> updateProfProfil(
             @PathVariable Long profId,
             @RequestBody ProfessorDTO professorDTO
