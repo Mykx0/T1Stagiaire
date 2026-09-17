@@ -2,29 +2,33 @@ import React, {useState} from 'react';
 import { useTranslation } from 'react-i18next';
 import FormInputs from "../FormInputs.jsx";
 import axiosClient from "../../api/axiosClient.js";
+// import {ROLE_CONFIG} from "./constants.js";
 
 
-const RegisterPage = () => {
+const RegisterPage = ({role}) => {
     const { t } = useTranslation();
-
+    console.log("role: ", role);
     const Discipline = {
-        ComputerScience: t('register.discipline.computerScience'),
-        Nursing: t("register.discipline.nursing"),
-        ElectricalEngineering: t("register.discipline.electricalEngineering")
+        ComputerScience: "ComputerScience",
+        Nursing: "Nursing",
+        ElectricalEngineering: "ElectricalEngineering"
     }
 
     const INPUTS = [
-        {id: 1, label: t('register.inputs.lastName.label'), type: "text", placeholder: t('register.inputs.lastName.placeholder'), name: "last_name"},
-        {id: 2, label: t('register.inputs.firstName.label'), type: "text", placeholder: t('register.inputs.firstName.placeholder'), name: "first_name"},
+        {id: 1, label: t('register.inputs.lastName.label'), type: "text", placeholder: t('register.inputs.lastName.placeholder'), name: "lastName"},
+        {id: 2, label: t('register.inputs.firstName.label'), type: "text", placeholder: t('register.inputs.firstName.placeholder'), name: "firstName"},
         {id: 3, label: t('register.inputs.email.label'), type: "email", placeholder: t('register.inputs.email.placeholder'), name: "email"},
         {id: 5, label: t('register.inputs.discipline.label'), type: "select", placeholder: t('register.inputs.discipline.placeholder'), name: "discipline", options: Object.values(Discipline)},
         {id: 6, label: t('register.inputs.password.label'), type: "password", placeholder: "•••••", name: "password"},
         {id: 7, label: t('register.inputs.confirmPassword.label'), type: "password", placeholder: "•••••", name: "passwordConfirmation"}
     ];
 
+    // const currentConfig = ROLE_CONFIG[role];
+    // const ACTIVE_INPUTS = [...comm]
+
     const [values, setValues] = useState({
-        last_name: '',
-        first_name: '',
+        lastName: '',
+        firstName: '',
         email: '',
         discipline: Discipline.ComputerScience,
         password: '',
@@ -40,31 +44,31 @@ const RegisterPage = () => {
         setValues({...values, [fieldName]: e.target.value});
     }
 
-    const isValid = () => {
-        if (!champsComplets()) {
-            setError('register.errors.allFieldsRequired');
-            return false;
-        }
-        if(values.last_name.length < 1 || values.first_name.length < 1){
-            setError('register.errors.nameMinLength');
-            return false;
-        }
-        if (!validateEmail()){
-            setError('register.errors.invalidEmail');
-            return false;
-        }
-        if (values.password.length < 8){
-            setError('register.errors.passwordMinLength');
-            return false;
-        }
-        if (!motPasseCompatible()){
-            setError('register.errors.passwordMismatch');
-            return false;
-        }
-        return true;
-    };
+        const isValid = () => {
+            if (!champsComplets()) {
+                setError('register.errors.allFieldsRequired');
+                return false;
+            }
+            if(values.lastName.length < 1 || values.firstName.length < 1){
+                setError('register.errors.nameMinLength');
+                return false;
+            }
+            if (!validateEmail()){
+                setError('register.errors.invalidEmail');
+                return false;
+            }
+            if (values.password.length < 8){
+                setError('register.errors.passwordMinLength');
+                return false;
+            }
+            if (!motPasseCompatible()){
+                setError('register.errors.passwordMismatch');
+                return false;
+            }
+            return true;
+        };
     const champsComplets = () => {
-        return values.last_name !== '' && values.first_name !== '' && values.email !== '' && values.discipline !== '' && values.password !== '' && values.passwordConfirmation !== '';
+        return values.lastName !== '' && values.firstName !== '' && values.email !== '' && values.discipline !== '' && values.password !== '' && values.passwordConfirmation !== '';
     }
     const validateEmail = () => {
         const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -81,23 +85,23 @@ const RegisterPage = () => {
         try{
             setDisableButton(true);
             const data = {
-                last_name: values.last_name,
-                first_name: values.first_name,
+                firstName: values.firstName,
+                lastName: values.lastName,
                 email: values.email,
+                password: values.password,
                 discipline: values.discipline,
-                password: values.password
             };
             const response = await axiosClient.post('/register/student', data);
             console.log(data)
             setValues({
-                last_name: '',
-                first_name: '',
+                lastName: '',
+                firstName: '',
                 email: '',
                 discipline: Discipline.ComputerScience,
                 password: '',
                 passwordConfirmation: ''
             });
-            setSimulationResponse( await axiosClient.get(`/${response.data.id}`));
+            // setSimulationResponse( await axiosClient.get(`/${response.data.id}`));
         }catch(e){
             setDisableButton(false);
             setError('register.errors.genericError');
@@ -114,7 +118,7 @@ const RegisterPage = () => {
                 </div>
                 <form onSubmit={handleRegister}
                       className="forms-style">
-                    {INPUTS.map((input)=>(
+                    {INPUTS.map((input) => (
                        <FormInputs
                             key={input.id}
                             placeholder={input.placeholder}
