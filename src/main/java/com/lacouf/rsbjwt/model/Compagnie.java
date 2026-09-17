@@ -19,5 +19,17 @@ public class Compagnie {
         this.city = city;
     }
 
-    public Compagnie(){};
+    public Compagnie(){}
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getCompagniName() {
+        return compagniName;
+    }
 }

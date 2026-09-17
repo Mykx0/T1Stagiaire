@@ -1,15 +1,13 @@
 package com.lacouf.rsbjwt.model;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+
 
 @Entity
 @DiscriminatorValue("Emp")
 public class Employe extends Utilisateur{
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "compagnie_id")
     private Compagnie compagnie;
 

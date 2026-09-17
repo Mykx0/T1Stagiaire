@@ -2,7 +2,9 @@ package com.lacouf.rsbjwt.service;
 
 import com.lacouf.rsbjwt.model.Compagnie;
 import com.lacouf.rsbjwt.model.Employe;
+import com.lacouf.rsbjwt.repository.CompagnieSpringRepo;
 import com.lacouf.rsbjwt.repository.EmployeSpringRepo;
+import com.lacouf.rsbjwt.service.dto.CompagnieDTO;
 import com.lacouf.rsbjwt.service.dto.EmployeDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,13 +13,21 @@ import org.springframework.transaction.annotation.Transactional;
 public class EmployeService {
 
     private EmployeSpringRepo employeSpringRepo;
+    private CompagnieSpringRepo compagnieSpringRepo;
 
-    public EmployeService(EmployeSpringRepo employeSpringRepo){
+    public EmployeService(EmployeSpringRepo employeSpringRepo, CompagnieSpringRepo compagnieSpringRepo){
         this.employeSpringRepo = employeSpringRepo;
+        this.compagnieSpringRepo = compagnieSpringRepo;
     }
 
     @Transactional
-    public EmployeDTO addEmploye(Long id, String name, String surname, String email, String password, Compagnie compagnie){
+    public CompagnieDTO addCompagnie(String compagniName, String city){
+        return CompagnieDTO.of(compagnieSpringRepo.save(new Compagnie(null, compagniName, city)));
+    }
+
+    @Transactional
+    public EmployeDTO addEmploye(Long id, String name, String surname, String email, String password, Long compagnieId){
+        Compagnie compagnie = compagnieSpringRepo.getReferenceById(compagnieId);
         Employe employe = new Employe();
         employe.setId(id);
         employe.setName(name);
@@ -25,11 +35,11 @@ public class EmployeService {
         employe.setEmail(email);
         employe.setPassword(password);
         employe.setCompagnie(compagnie);
-        return EmployeDTO.of((Employe) employeSpringRepo.save(employe));
+        return EmployeDTO.of(employeSpringRepo.save(employe));
     }
 
     @Transactional
     public EmployeDTO findEmployeBy_Id(Long id){
-        return EmployeDTO.of((Employe) employeSpringRepo.findEmployeById(id));
+        return EmployeDTO.of(employeSpringRepo.findEmployeById(id));
     }
 }
