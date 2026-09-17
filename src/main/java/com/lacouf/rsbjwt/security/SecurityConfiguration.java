@@ -48,8 +48,8 @@ public class SecurityConfiguration {
 
     private static final String H2_CONSOLE_PATH   = "/h2-console/**";
     private static final String USER_LOGIN_PATH   = "/user/login";
-    private static final String PROF_REGISTER_PATH = "/api/professor/register";
-    private static final String PROF_PATH         = "/api/professor/**";
+    private static final String PROF_REGISTER_PATH = "/api/register/prof";
+    private static final String PROF_PATH         = "/api/prof/**";
     private static final String GESTIONNAIRE_PATH = "/api/gestionnaire/**";
     private static final String PROF_GET_EMAIL_PATH = "/api/*/email";
 
