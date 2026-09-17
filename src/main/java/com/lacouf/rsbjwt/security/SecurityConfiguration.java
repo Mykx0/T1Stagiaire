@@ -46,14 +46,9 @@ public class SecurityConfiguration {
 
     private static final String H2_CONSOLE_PATH = "/h2-console/**";
     private static final String USER_LOGIN_PATH = "/user/login";
-    private static final String EMPRUNTEUR_REGISTER_PATH = "/emprunteur/register";
-    private static final String PREPOSE_REGISTER_PATH = "/prepose/register";
     private static final String USER_PATH = "/user/**";
-    private static final String EMPRUNTEUR_PATH = "/emprunteur/**";
-    private static final String PREPOSE_PATH = "/prepose/**";
     private static final String GESTIONNAIRE_PATH = "/gestionnaire/**";
-
-
+    private static final String PROF_REGISTER_PATH = "/professor/register";
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -62,27 +57,21 @@ public class SecurityConfiguration {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(POST, USER_LOGIN_PATH).permitAll()
-                        .requestMatchers(POST, EMPRUNTEUR_REGISTER_PATH).permitAll()
-                        .requestMatchers(POST, PREPOSE_REGISTER_PATH).permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll() // Allow CORS preflight requests
-                        .requestMatchers(H2_CONSOLE_PATH).permitAll() // Allow H2 console access
-
-                        // Use Role enum names for authorities
-                        .requestMatchers(GET, USER_PATH).hasAnyAuthority(Role.EMPRUNTEUR.name(), Role.PREPOSE.name(), Role.GESTIONNAIRE.name())
-                        .requestMatchers(EMPRUNTEUR_PATH).hasAuthority(Role.EMPRUNTEUR.name())
-                        .requestMatchers(PREPOSE_PATH).hasAuthority(Role.PREPOSE.name())
-                        .requestMatchers(GESTIONNAIRE_PATH).hasAuthority(Role.GESTIONNAIRE.name())
-                        .anyRequest().authenticated() // Changed from denyAll() to authenticated() - more common, adjust if denyAll is strictly needed
+                        .requestMatchers(POST, PROF_REGISTER_PATH).permitAll()
+                        .requestMatchers(OPTIONS, "/**").permitAll()
+                        .requestMatchers(H2_CONSOLE_PATH).permitAll()
+                        .requestMatchers("/professor/**").hasAuthority(Role.PROFESSOR.name())
+                        .requestMatchers("/gestionnaire/**").hasAuthority(Role.GESTIONNAIRE.name())
+                        .anyRequest().authenticated()
                 )
-                .headers(headers -> headers.frameOptions(Customizer.withDefaults()).disable()) // for h2-console
-                .sessionManagement((secuManagement) -> {
-                    secuManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                })
+                .headers(headers -> headers.frameOptions(Customizer.withDefaults()).disable())
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(configurer -> configurer.authenticationEntryPoint(authenticationEntryPoint));
+                .exceptionHandling(c -> c.authenticationEntryPoint(authenticationEntryPoint));
 
         return http.build();
     }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {

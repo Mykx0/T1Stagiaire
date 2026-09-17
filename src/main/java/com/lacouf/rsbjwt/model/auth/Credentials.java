@@ -25,10 +25,6 @@ public final class Credentials implements UserDetails {
 	@Column(nullable = false)
 	private Role role;
 
-	public Credentials(String email, @Nullable String encode, String professor) {
-	}
-
-
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Collections.singleton(new SimpleGrantedAuthority(role.name()));

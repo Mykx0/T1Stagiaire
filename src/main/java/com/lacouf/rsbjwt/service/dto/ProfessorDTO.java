@@ -3,7 +3,6 @@ package com.lacouf.rsbjwt.service.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.lacouf.rsbjwt.model.auth.Role;
 
-
 public class ProfessorDTO {
 
     private Long id;
@@ -13,8 +12,8 @@ public class ProfessorDTO {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-    private String department;
-    private String specialization;
+
+    private String discipline;
     private Role role;
 
     public ProfessorDTO() {
@@ -25,16 +24,14 @@ public class ProfessorDTO {
             String firstName,
             String lastName,
             String email,
-            String department,
-            String specialization,
+            String discipline,
             Role role
     ) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.department = department;
-        this.specialization = specialization;
+        this.discipline = discipline;
         this.role = role;
     }
 
@@ -53,11 +50,8 @@ public class ProfessorDTO {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public String getDepartment() { return department; }
-    public void setDepartment(String department) { this.department = department; }
-
-    public String getSpecialization() { return specialization; }
-    public void setSpecialization(String specialization) { this.specialization = specialization; }
+    public String getDiscipline() { return discipline; }
+    public void setDiscipline(String discipline) { this.discipline = discipline; }
 
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }

@@ -41,6 +41,10 @@ public abstract class UserApp {
         return lastName;
     }
 
+    public void setFirstName(String firstName) { this.firstName = firstName;}
+
+    public void setLastName(String lastName) { this.lastName = lastName;}
+
     public String getEmail() {
         return credentials.getEmail();
     }

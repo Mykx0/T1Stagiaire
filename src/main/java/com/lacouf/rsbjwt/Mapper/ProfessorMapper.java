@@ -14,9 +14,7 @@ public class ProfessorMapper {
                 dto.getFirstName(),
                 dto.getLastName(),
                 credentials,
-                dto.getEmail(),
-                dto.getDepartment(),
-                dto.getSpecialization()
+                dto.getDiscipline()
         );
     }
 
@@ -26,8 +24,7 @@ public class ProfessorMapper {
                 professor.getFirstName(),
                 professor.getLastName(),
                 professor.getEmail(),
-                professor.getDepartment(),
-                professor.getSpecialization(),
+                professor.getDiscipline(),
                 Role.PROFESSOR
         );
     }

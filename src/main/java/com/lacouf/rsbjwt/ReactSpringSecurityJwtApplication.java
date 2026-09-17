@@ -1,24 +1,18 @@
 package com.lacouf.rsbjwt;
 
-import com.lacouf.rsbjwt.model.*;
-import com.lacouf.rsbjwt.repository.UserAppRepository;
+import com.lacouf.rsbjwt.service.UserAppService;
+import com.lacouf.rsbjwt.service.dto.ProfessorDTO;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.time.LocalDate;
-import java.util.Optional;
 
 @SpringBootApplication
 public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
-    // Edouard Lambert
-    private final UserAppRepository userAppRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public ReactSpringSecurityJwtApplication( UserAppRepository userAppRepository, PasswordEncoder passwordEncoder) {
-        this.userAppRepository = userAppRepository;
-        this.passwordEncoder = passwordEncoder;
+    private final UserAppService userAppService;
+
+    public ReactSpringSecurityJwtApplication(UserAppService userAppService) {
+        this.userAppService = userAppService;
     }
 
     public static void main(String[] args) {
@@ -26,10 +20,30 @@ public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
 
-        final Optional<UserApp> userAppByEmail = userAppRepository.findUserAppByEmail("l@l.com");
-        userAppByEmail.ifPresent(userApp -> System.out.println("user " + userAppByEmail));
+        seedProfessor("Jean", "Tremblay", "jean.tremblay@example.com", "password123", "Software Engineering");
+        seedProfessor("Marie", "Curie", "marie.curie@example.com", "password123", "Physics");
+        seedProfessor("Albert", "Einstein", "albert.einstein@example.com", "password123", "Physics");
+        seedProfessor("Ada", "Lovelace", "ada.lovelace@example.com", "password123", "Computer Science");
+    }
 
+    private void seedProfessor(String firstName, String lastName, String email,
+                               String rawPassword, String discipline) {
+
+        ProfessorDTO dto = new ProfessorDTO();
+        dto.setFirstName(firstName);
+        dto.setLastName(lastName);
+        dto.setEmail(email);
+        dto.setPassword(rawPassword);
+        dto.setDiscipline(discipline);
+
+        try {
+            ProfessorDTO saved = userAppService.registerProfessor(dto);
+            System.out.println("Professor created: " + saved.getEmail());
+        } catch (Exception e) {
+            System.out.println("Professor already exists or error: "
+                    + email + " (" + e.getMessage() + ")");
+        }
     }
 }

@@ -1,45 +1,113 @@
 package com.lacouf.rsbjwt.service;
 
-import com.lacouf.rsbjwt.model.*;
+import com.lacouf.rsbjwt.Mapper.ProfessorMapper;
+import com.lacouf.rsbjwt.model.Professor;
+import com.lacouf.rsbjwt.model.auth.Credentials;
+import com.lacouf.rsbjwt.model.auth.Role;
+import com.lacouf.rsbjwt.repository.ProfessorRepository;
 import com.lacouf.rsbjwt.repository.UserAppRepository;
-import com.lacouf.rsbjwt.service.dto.*;
 import com.lacouf.rsbjwt.security.JwtTokenProvider;
-import com.lacouf.rsbjwt.security.exception.UserNotFoundException;
+import com.lacouf.rsbjwt.security.exception.EmailAlreadyUsedException;
+import com.lacouf.rsbjwt.security.exception.ProfessorNotFoundException;
+import com.lacouf.rsbjwt.service.dto.ProfessorDTO;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class UserAppService {
+
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserAppRepository userAppRepository;
+    private final ProfessorRepository professorRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final ProfessorMapper professorMapper;
 
-    public UserAppService(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserAppRepository userAppRepository) {
+    public UserAppService(
+            AuthenticationManager authenticationManager,
+            JwtTokenProvider jwtTokenProvider,
+            UserAppRepository userAppRepository,
+            ProfessorRepository professorRepository,
+            PasswordEncoder passwordEncoder,
+            ProfessorMapper professorMapper
+    ) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userAppRepository = userAppRepository;
+        this.professorRepository = professorRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.professorMapper = professorMapper;
     }
-// La logique du code peut être utilisée pour l'authentification
-//    public String authenticateUser(LoginDTO loginDto) {
-//        Authentication authentication = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
-//        final String token = jwtTokenProvider.generateToken(authentication);
-//        System.out.println("JWT Token " + token);
-//        return token;
-//    }
 
-//    public UserDTO getMe(String token) {
-//        token = token.startsWith("Bearer") ? token.substring(7) : token;
-//        String email = jwtTokenProvider.getEmailFromJWT(token);
-//        UserApp user = userAppRepository.findUserAppByEmail(email).orElseThrow(UserNotFoundException::new);
-//        return switch(user.getRole()){
-//            case EMPRUNTEUR -> getEmprunteurDto(user.getId());
-//            case PREPOSE -> getPreposeDto(user.getId());
-//            case GESTIONNAIRE -> getGestionnaireDto(user.getId());
-//        };
-//    }
+
+    public ProfessorDTO registerProfessor(ProfessorDTO dto) {
+        String email = dto.getEmail().trim().toLowerCase();
+
+        if (userAppRepository.findUserAppByEmail(email).isPresent()) {
+            throw new EmailAlreadyUsedException(email);
+        }
+
+        Credentials credentials = new Credentials(
+                email,
+                passwordEncoder.encode(dto.getPassword()),
+                Role.PROFESSOR
+        );
+
+        Professor professor = professorMapper.toEntity(dto, credentials);
+        return professorMapper.toDto(professorRepository.save(professor));
+    }
+
+    public String getProfessorEmailById(Long id) {
+        Professor professor = professorRepository.findById(id)
+                .orElseThrow(() -> new ProfessorNotFoundException(id));
+        return professor.getEmail();
+    }
+
+    public String getProfessorEmailByName(String firstName, String lastName) {
+        List<Professor> professors = professorRepository.findByFullName(firstName, lastName);
+        if (professors.isEmpty()) {
+            throw new ProfessorNotFoundException(
+                    "Aucun professeur trouvé pour " + firstName + " " + lastName);
+        }
+        return professors.get(0).getEmail();
+    }
+
+
+
+    public ProfessorDTO updateProfessor(Long id, ProfessorDTO dto) {
+        Professor professor = professorRepository.findById(id)
+                .orElseThrow(() -> new ProfessorNotFoundException(id));
+
+        String newEmail = dto.getEmail().trim().toLowerCase();
+        String currentEmail = professor.getEmail();
+
+        if (!newEmail.equalsIgnoreCase(currentEmail)
+                && userAppRepository.findUserAppByEmail(newEmail).isPresent()) {
+            throw new EmailAlreadyUsedException(newEmail);
+        }
+
+        professor.setFirstName(dto.getFirstName());
+        professor.setLastName(dto.getLastName());
+        professor.setDiscipline(dto.getDiscipline());
+
+        String newPassword = dto.getPassword();
+        String encodedPassword = (newPassword == null || newPassword.isBlank())
+                ? professor.getPassword()
+                : passwordEncoder.encode(newPassword);
+
+        professor.setCredentials(new Credentials(newEmail, encodedPassword, Role.PROFESSOR));
+
+        return professorMapper.toDto(professorRepository.save(professor));
+    }
+
+    // ================== AUTH (à activer plus tard) ==================
+
+    // public String authenticateUser(LoginDTO loginDto) {
+    //     Authentication authentication = authenticationManager.authenticate(
+    //             new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+    //     return jwtTokenProvider.generateToken(authentication);
+    // }
 }
