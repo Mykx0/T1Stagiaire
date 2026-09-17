@@ -2,9 +2,9 @@ package com.lacouf.rsbjwt;
 
 import com.lacouf.rsbjwt.model.*;
 import com.lacouf.rsbjwt.repository.UserAppRepository;
-import com.lacouf.rsbjwt.service.EmployeService;
-import com.lacouf.rsbjwt.service.dto.CompagnieDTO;
-import com.lacouf.rsbjwt.service.dto.EmployeDTO;
+import com.lacouf.rsbjwt.service.EmployerService;
+import com.lacouf.rsbjwt.service.dto.CompanyDTO;
+import com.lacouf.rsbjwt.service.dto.EmployerDTO;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,15 +14,14 @@ import java.util.Optional;
 
 @SpringBootApplication
 public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
-    // Brahim El khazraji
     private final UserAppRepository userAppRepository;
     private final PasswordEncoder passwordEncoder;
-    private final EmployeService employeService;
+    private final EmployerService employerService;
 
-    public ReactSpringSecurityJwtApplication(UserAppRepository userAppRepository, PasswordEncoder passwordEncoder, EmployeService employeService) {
+    public ReactSpringSecurityJwtApplication(UserAppRepository userAppRepository, PasswordEncoder passwordEncoder, EmployerService employerService) {
         this.userAppRepository = userAppRepository;
         this.passwordEncoder = passwordEncoder;
-        this.employeService = employeService;
+        this.employerService = employerService;
     }
 
     public static void main(String[] args) {
@@ -35,13 +34,17 @@ public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
         final Optional<UserApp> userAppByEmail = userAppRepository.findUserAppByEmail("l@l.com");
         userAppByEmail.ifPresent(userApp -> System.out.println("user " + userAppByEmail));
 
-        CompagnieDTO compagnie = employeService.addCompagnie("Hydroquebec", "Montreal");
+        CompanyDTO compagnie = employerService.addCompagnie("Hydroquebec", "Montreal");
+        CompanyDTO compagnie2 = employerService.addCompagnie("Videotron" , "Laval");
 
-        EmployeDTO employe1 = employeService.addEmploye(null, "Cassie", "Cage", "cassiecage@gmail.com", "jiji", compagnie.id());
-        EmployeDTO employe2 = employeService.addEmploye(null, "Jonny", "Cage", "jhonndhjfhfod", "jojo", compagnie.id());
+        EmployerDTO employe1 = employerService.addEmploye( "Cassie", "Cage", "cassiecage@gmail.com", "jiji", compagnie.id());
+        EmployerDTO employe2 = employerService.addEmploye( "Jonny", "Cage", "jhonndhjfhfod", "jojo", compagnie.id());
 
-        EmployeDTO trouve = employeService.findEmployeBy_Id(employe1.id());
-        EmployeDTO trouve2 = employeService.findEmployeBy_Id(employe2.id());
+        EmployerDTO trouve = employerService.findEmployeBy_Id(employe1.id());
+        EmployerDTO trouve2 = employerService.findEmployeBy_Id(employe2.id());
+
+        System.out.println(compagnie);
+        System.out.println(compagnie2);
         System.out.println(trouve);
         System.out.println(trouve2);
     }
