@@ -2,7 +2,7 @@
   "register": {
     "title": "Create an Account",
     "subtitle": "Enter your information to sign up",
-    "submitButton": "Sign up",
+    "submitButton": "Sign up as a student",
     "submitting": "Signing up...",
     "successMessage": "Registration successful! You can now log in.\nData sent:",
     "inputs": {
@@ -17,6 +17,10 @@
       "email": {
         "label": "Email",
         "placeholder": "you@example.com"
+      },
+      "discipline": {
+        "label": "Discipline",
+        "placeholder": "Your discipline"
       },
       "password": {
         "label": "Password"
@@ -33,6 +37,11 @@
       "passwordMinLength": "Password must be at least 8 characters long",
       "passwordMismatch": "Passwords do not match",
       "genericError": "An error occurred during registration"
+    },
+    "discipline": {
+      "computerScience": "Computer Science",
+      "nursing": "Nursing",
+      "electricalEngineering": "Electrical Engineering"
     }
   },
   "roles": {

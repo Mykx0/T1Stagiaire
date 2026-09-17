@@ -18,6 +18,9 @@
         "label": "Courriel",
         "placeholder": "vous@exemple.com"
       },
+      "discipline": {
+        "label": "Discipline"
+      },
       "password": {
         "label": "Mot de passe"
       },
@@ -33,6 +36,11 @@
       "passwordMinLength": "Le mot de passe doit contenir au moins 8 caractères",
       "passwordMismatch": "Les mots de passe ne correspondent pas",
       "genericError": "Une erreur est survenue lors de l'inscription"
+    },
+    "discipline": {
+      "computerScience": "Informatique",
+      "nursing": "Soins infirmiers",
+      "electricalEngineering": "Génie électrique"
     }
   },
    "roles": {
