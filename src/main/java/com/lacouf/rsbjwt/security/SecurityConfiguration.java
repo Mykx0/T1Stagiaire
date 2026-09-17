@@ -65,7 +65,7 @@ public class SecurityConfiguration {
                         .requestMatchers(H2_CONSOLE_PATH).permitAll()
                         .requestMatchers(PROF_PATH).permitAll()
                         .requestMatchers(PROF_GET_EMAIL_PATH).permitAll()
-                        .requestMatchers(GESTIONNAIRE_PATH).hasAuthority(Role.GESTIONNAIRE.name())
+                        .requestMatchers(GESTIONNAIRE_PATH).hasAuthority(Role.INTERNSHIP_MANAGER.name())
 
                         .anyRequest().authenticated()
                 )
@@ -82,7 +82,7 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(
-                "http://localhost:3000" // CRA
+                "http://localhost:3000"
         ));
 
         configuration.setAllowedMethods(Arrays.asList(

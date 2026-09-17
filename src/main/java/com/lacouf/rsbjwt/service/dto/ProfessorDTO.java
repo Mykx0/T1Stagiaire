@@ -1,58 +1,43 @@
 package com.lacouf.rsbjwt.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lacouf.rsbjwt.model.Professor;
+import com.lacouf.rsbjwt.model.auth.Credentials;
 import com.lacouf.rsbjwt.model.auth.Role;
+import org.springframework.stereotype.Component;
 
-public class ProfessorDTO {
+public record ProfessorDTO(
+        Long id,
+        String firstName,
+        String lastName,
+        String email,
+        String discipline,
+        Role role,
 
-    private Long id;
-    private String firstName;
-    private String lastName;
-    private String email;
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        String password
+) {
+    @Component
+    public record Mapper() {
+        public Professor toEntity(ProfessorDTO dto, Credentials credentials) {
+            return new Professor(
+                    dto.firstName(),
+                    dto.lastName(),
+                    credentials,
+                    dto.discipline()
+            );
+        }
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
-
-    private String discipline;
-    private Role role;
-
-    public ProfessorDTO() {
+        public ProfessorDTO toDto(Professor professor) {
+            return new ProfessorDTO(
+                    professor.getId(),
+                    professor.getFirstName(),
+                    professor.getLastName(),
+                    professor.getEmail(),
+                    professor.getDiscipline(),
+                    Role.PROFESSOR,
+                    null
+            );
+        }
     }
-
-    public ProfessorDTO(
-            Long id,
-            String firstName,
-            String lastName,
-            String email,
-            String discipline,
-            Role role
-    ) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.discipline = discipline;
-        this.role = role;
-    }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getFirstName() { return firstName; }
-    public void setFirstName(String firstName) { this.firstName = firstName; }
-
-    public String getLastName() { return lastName; }
-    public void setLastName(String lastName) { this.lastName = lastName; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
-
-    public String getDiscipline() { return discipline; }
-    public void setDiscipline(String discipline) { this.discipline = discipline; }
-
-    public Role getRole() { return role; }
-    public void setRole(Role role) { this.role = role; }
 }

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lacouf.rsbjwt.controller.ProfessorController;
 import com.lacouf.rsbjwt.model.auth.Role;
 import com.lacouf.rsbjwt.security.exception.EmailAlreadyUsedException;
-import com.lacouf.rsbjwt.security.exception.ProfessorNotFoundException;
 import com.lacouf.rsbjwt.service.ProfService;
 import com.lacouf.rsbjwt.service.dto.ProfessorDTO;
 import org.junit.jupiter.api.Test;
@@ -29,21 +28,32 @@ class ProfessorControllerTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @MockitoBean
-    private ProfService userService;
+    private ProfService profService;
+
 
     @Test
     void register_shouldReturnCreated() throws Exception {
-        ProfessorDTO request = new ProfessorDTO();
-        request.setFirstName("Jean");
-        request.setLastName("Tremblay");
-        request.setEmail("jean.tremblay@example.com");
-        request.setPassword("password123");
-        request.setDiscipline("Software Engineering");
+        ProfessorDTO request = new ProfessorDTO(
+                null,
+                "Jean",
+                "Tremblay",
+                "jean.tremblay@example.com",
+                "Software Engineering",
+                Role.PROFESSOR,
+                "password123"
+        );
 
-        ProfessorDTO response = new ProfessorDTO(1L, "Jean", "Tremblay",
-                "jean.tremblay@example.com", "Software Engineering", Role.PROFESSOR);
+        ProfessorDTO response = new ProfessorDTO(
+                1L,
+                "Jean",
+                "Tremblay",
+                "jean.tremblay@example.com",
+                "Software Engineering",
+                Role.PROFESSOR,
+                null
+        );
 
-        when(userService.registerProfessor(any(ProfessorDTO.class))).thenReturn(response);
+        when(profService.registerProfessor(any(ProfessorDTO.class))).thenReturn(response);
 
         mockMvc.perform(post("/api/register/prof")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -54,22 +64,25 @@ class ProfessorControllerTest {
                 .andExpect(jsonPath("$.lastName").value("Tremblay"))
                 .andExpect(jsonPath("$.email").value("jean.tremblay@example.com"))
                 .andExpect(jsonPath("$.discipline").value("Software Engineering"))
-                .andExpect(jsonPath("$.role").value("ROLE_PROFESSOR"))
+                .andExpect(jsonPath("$.role").value("PROFESSOR"))
                 .andExpect(jsonPath("$.password").doesNotExist());
 
-        verify(userService).registerProfessor(any(ProfessorDTO.class));
+        verify(profService).registerProfessor(any(ProfessorDTO.class));
     }
 
     @Test
     void register_shouldReturnConflictWhenEmailUsed() throws Exception {
-        ProfessorDTO request = new ProfessorDTO();
-        request.setFirstName("Jean");
-        request.setLastName("Tremblay");
-        request.setEmail("jean.tremblay@example.com");
-        request.setPassword("password123");
-        request.setDiscipline("Software Engineering");
+        ProfessorDTO request = new ProfessorDTO(
+                null,
+                "Jean",
+                "Tremblay",
+                "jean.tremblay@example.com",
+                "Software Engineering",
+                Role.PROFESSOR,
+                "password123"
+        );
 
-        when(userService.registerProfessor(any(ProfessorDTO.class)))
+        when(profService.registerProfessor(any(ProfessorDTO.class)))
                 .thenThrow(new EmailAlreadyUsedException("jean.tremblay@example.com"));
 
         mockMvc.perform(post("/api/register/prof")
@@ -81,15 +94,41 @@ class ProfessorControllerTest {
     }
 
     @Test
-    void register_shouldReturnInternalErrorOnUnexpectedException() throws Exception {
-        ProfessorDTO request = new ProfessorDTO();
-        request.setFirstName("Jean");
-        request.setLastName("Tremblay");
-        request.setEmail("jean.tremblay@example.com");
-        request.setPassword("password123");
-        request.setDiscipline("Software Engineering");
+    void register_shouldReturnBadRequestOnIllegalArgument() throws Exception {
+        ProfessorDTO request = new ProfessorDTO(
+                null,
+                "Jean",
+                "Tremblay",
+                "jean.tremblay@example.com",
+                "Software Engineering",
+                Role.PROFESSOR,
+                "password123"
+        );
 
-        when(userService.registerProfessor(any(ProfessorDTO.class)))
+        when(profService.registerProfessor(any(ProfessorDTO.class)))
+                .thenThrow(new IllegalArgumentException("bad input"));
+
+        mockMvc.perform(post("/api/register/prof")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Invalid input"))
+                .andExpect(jsonPath("$.message").value("bad input"));
+    }
+
+    @Test
+    void register_shouldReturnInternalErrorOnUnexpectedException() throws Exception {
+        ProfessorDTO request = new ProfessorDTO(
+                null,
+                "Jean",
+                "Tremblay",
+                "jean.tremblay@example.com",
+                "Software Engineering",
+                Role.PROFESSOR,
+                "password123"
+        );
+
+        when(profService.registerProfessor(any(ProfessorDTO.class)))
                 .thenThrow(new RuntimeException("boom"));
 
         mockMvc.perform(post("/api/register/prof")
@@ -100,30 +139,5 @@ class ProfessorControllerTest {
                 .andExpect(jsonPath("$.message").value("boom"));
     }
 
-
-    @Test
-    void getEmailByName_shouldReturnEmail() throws Exception {
-        when(userService.getProfessorEmailByName("Jean", "Tremblay"))
-                .thenReturn("jean.tremblay@example.com");
-
-        mockMvc.perform(get("/api/prof/email")
-                        .param("firstName", "Jean")
-                        .param("lastName", "Tremblay"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("jean.tremblay@example.com"));
-    }
-
-    @Test
-    void getEmailByName_shouldReturnNotFound() throws Exception {
-        when(userService.getProfessorEmailByName("Unknown", "Person"))
-                .thenThrow(new ProfessorNotFoundException("No professor found for Unknown Person"));
-
-        mockMvc.perform(get("/api/prof/email")
-                        .param("firstName", "Unknown")
-                        .param("lastName", "Person"))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.error").value("Professor not found"))
-                .andExpect(jsonPath("$.message").exists());
-    }
 
 }

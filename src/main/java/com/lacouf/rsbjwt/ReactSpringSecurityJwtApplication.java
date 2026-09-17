@@ -1,5 +1,6 @@
 package com.lacouf.rsbjwt;
 
+import com.lacouf.rsbjwt.model.auth.Role;
 import com.lacouf.rsbjwt.service.ProfService;
 import com.lacouf.rsbjwt.service.dto.ProfessorDTO;
 import org.springframework.boot.CommandLineRunner;
@@ -9,10 +10,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
 
-    private final ProfService userService;
+    private final ProfService profService;
 
-    public ReactSpringSecurityJwtApplication(ProfService userService) {
-        this.userService = userService;
+    public ReactSpringSecurityJwtApplication(ProfService profService) {
+        this.profService = profService;
     }
 
     public static void main(String[] args) {
@@ -30,16 +31,20 @@ public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
 
     private void seedProfessor(String firstName, String lastName, String email,
                                String rawPassword, String discipline) {
-        ProfessorDTO dto = new ProfessorDTO();
-        dto.setFirstName(firstName);
-        dto.setLastName(lastName);
-        dto.setEmail(email);
-        dto.setPassword(rawPassword);
-        dto.setDiscipline(discipline);
+
+        ProfessorDTO dto = new ProfessorDTO(
+                null,
+                firstName,
+                lastName,
+                email,
+                discipline,
+                Role.PROFESSOR,
+                rawPassword
+        );
 
         try {
-            ProfessorDTO saved = userService.registerProfessor(dto);
-            System.out.println("Professor created: " + saved.getEmail());
+            ProfessorDTO saved = profService.registerProfessor(dto);
+            System.out.println("Professor created: " + saved.email());
         } catch (Exception e) {
             System.out.println("Professor already exists or error: "
                     + email + " (" + e.getMessage() + ")");

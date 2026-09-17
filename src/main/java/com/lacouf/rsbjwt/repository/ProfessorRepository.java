@@ -10,13 +10,4 @@ import java.util.Optional;
 
 public interface ProfessorRepository extends JpaRepository<Professor, Long> {
 
-    @Query("""
-        select p from Professor p
-        where lower(p.firstName) = lower(:firstName)
-          and lower(p.lastName) = lower(:lastName)
-    """)
-    List<Professor> findByFullName(
-            @Param("firstName") String firstName,
-            @Param("lastName") String lastName
-    );
 }

@@ -1,10 +1,13 @@
 package com.lacouf.rsbjwt.model.auth;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.util.HashSet;
 import java.util.Set;
 
-public enum Role{
-	GESTIONNAIRE("ROLE_GESTIONNAIRE"),
+public enum Role {
+	INTERNSHIP_MANAGER("ROLE_INTERNSHIP_MANAGER"),
 	PROFESSOR("ROLE_PROFESSOR"),
 	EMPLOYER("ROLE_EMPLOYER"),
 	STUDENT("ROLE_STUDENT");
@@ -13,19 +16,33 @@ public enum Role{
 	private final Set<Role> managedRoles = new HashSet<>();
 
 	static {
-		GESTIONNAIRE.managedRoles.add(PROFESSOR);
-		GESTIONNAIRE.managedRoles.add(STUDENT);
+		INTERNSHIP_MANAGER.managedRoles.add(PROFESSOR);
+		INTERNSHIP_MANAGER.managedRoles.add(STUDENT);
 	}
-	Role(String string){
+
+	Role(String string) {
 		this.string = string;
 	}
+
 	public Set<Role> getManagedRoles() {
 		return managedRoles;
 	}
 
-	@Override
-	public String toString(){
+	@JsonValue
+	public String getString() {
 		return string;
 	}
 
+	@JsonCreator
+	public static Role fromString(String v) {
+		for (Role r : values()) {
+			if (r.string.equals(v)) return r;
+		}
+		throw new IllegalArgumentException("Unknown Role: " + v);
+	}
+
+	@Override
+	public String toString() {
+		return string;
+	}
 }
