@@ -38,11 +38,11 @@ public class ProfessorController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(ErrorResponse.internalError(e.getMessage()));
+                    .body(ErrorResponse.invalidInput(e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Internal error", "message", e.getMessage()));
+                    .body(ErrorResponse.internalError(e.getMessage()));
         }
 
     }
