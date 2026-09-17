@@ -1,9 +1,6 @@
 package com.lacouf.rsbjwt.service;
 
-import com.lacouf.rsbjwt.model.Discipline;
-import com.lacouf.rsbjwt.model.Student;
 import com.lacouf.rsbjwt.model.User;
-import com.lacouf.rsbjwt.repository.StudentRepository;
 import com.lacouf.rsbjwt.repository.UserRepository;
 import com.lacouf.rsbjwt.security.JwtTokenProvider;
 import com.lacouf.rsbjwt.security.exception.UserNotFoundException;
@@ -12,25 +9,20 @@ import com.lacouf.rsbjwt.service.dto.UserDTO;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
     private final AuthenticationManager authManager;
     private final JwtTokenProvider jwtTokenProvider;
-    private final StudentRepository studentRepo;
     private final UserRepository userRepo;
-    private final PasswordEncoder encoder;
 
-    public UserService(StudentRepository studentRepo, UserRepository userRepo, PasswordEncoder encoder, AuthenticationManager authManager, JwtTokenProvider jwtTokenProvider) {
-        this.studentRepo = studentRepo;
+    public UserService(UserRepository userRepo, AuthenticationManager authManager, JwtTokenProvider jwtTokenProvider) {
         this.userRepo = userRepo;
-        this.encoder = encoder;
         this.authManager = authManager;
         this.jwtTokenProvider = jwtTokenProvider;
     }
-    // Generic user methods
+
     public UserDTO getUser(long id) {
         return new UserDTO(userRepo.findById(id).orElseThrow(UserNotFoundException::new));
     }
@@ -52,11 +44,5 @@ public class UserService {
         final String token = jwtTokenProvider.generateToken(authentication);
         System.out.println("JWT Token " + token);
         return token;
-    }
-
-    // Student specific methods
-    public UserDTO createStudent(String firstName, String lastName, String email, String password, Discipline discipline) {
-        Student student = studentRepo.save(new Student(firstName, lastName, email, encoder.encode(password), discipline));
-        return new UserDTO(student);
     }
 }
