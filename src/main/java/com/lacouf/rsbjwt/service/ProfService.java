@@ -26,8 +26,6 @@ public class ProfService {
     private final ProfessorMapper professorMapper;
 
     public ProfService(
-            AuthenticationManager authenticationManager,
-            JwtTokenProvider jwtTokenProvider,
             UserAppRepository userAppRepository,
             ProfessorRepository professorRepository,
             PasswordEncoder passwordEncoder,

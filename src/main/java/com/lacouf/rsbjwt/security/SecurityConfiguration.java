@@ -31,24 +31,26 @@ import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity // Enables @PreAuthorize, @PostAuthorize, etc.
+@EnableMethodSecurity
 public class SecurityConfiguration {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserAppRepository userRepository;
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
 
-    public SecurityConfiguration(JwtTokenProvider jwtTokenProvider, UserAppRepository userRepository, JwtAuthenticationEntryPoint authenticationEntryPoint) {
+    public SecurityConfiguration(JwtTokenProvider jwtTokenProvider,
+                                 UserAppRepository userRepository,
+                                 JwtAuthenticationEntryPoint authenticationEntryPoint) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = userRepository;
         this.authenticationEntryPoint = authenticationEntryPoint;
     }
 
-    private static final String H2_CONSOLE_PATH = "/h2-console/**";
-    private static final String USER_LOGIN_PATH = "/user/login";
-    private static final String USER_PATH = "/user/**";
-    private static final String GESTIONNAIRE_PATH = "/gestionnaire/**";
-    private static final String PROF_REGISTER_PATH = "/professor/register";
+    private static final String H2_CONSOLE_PATH   = "/h2-console/**";
+    private static final String USER_LOGIN_PATH   = "/user/login";
+    private static final String PROF_REGISTER_PATH = "/api/professor/register";
+    private static final String PROF_PATH         = "/api/professor/**";
+    private static final String GESTIONNAIRE_PATH = "/api/gestionnaire/**";
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -60,8 +62,11 @@ public class SecurityConfiguration {
                         .requestMatchers(POST, PROF_REGISTER_PATH).permitAll()
                         .requestMatchers(OPTIONS, "/**").permitAll()
                         .requestMatchers(H2_CONSOLE_PATH).permitAll()
-                        .requestMatchers("/professor/**").hasAuthority(Role.PROFESSOR.name())
-                        .requestMatchers("/gestionnaire/**").hasAuthority(Role.GESTIONNAIRE.name())
+                        // IMPORTANT: register must be BEFORE /api/professor/**,
+                        // which is already the case here.
+                        .requestMatchers(PROF_PATH).hasAuthority(Role.PROFESSOR.name())
+                        .requestMatchers(GESTIONNAIRE_PATH).hasAuthority(Role.GESTIONNAIRE.name())
+
                         .anyRequest().authenticated()
                 )
                 .headers(headers -> headers.frameOptions(Customizer.withDefaults()).disable())
@@ -72,48 +77,35 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // 1. Specify allowed origins (VERY IMPORTANT!)
-        //    Must match your React app's URL exactly (e.g., http://localhost:3000)
-        //    Do NOT use "*" if you need credentials (like sending Authorization headers)
-        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // Adjust if your frontend runs elsewhere
+        // Allow both common React dev ports
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:3000",   // CRA
+                "http://localhost:5173"    // Vite
+        ));
 
-        // 2. Specify allowed HTTP methods
         configuration.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),
                 HttpMethod.PUT.name(),
                 HttpMethod.DELETE.name(),
-                HttpMethod.OPTIONS.name() // Crucial for preflight requests
+                HttpMethod.OPTIONS.name()
         ));
 
-        // 3. Specify allowed headers
-        //    Include standard headers and importantly "Authorization" for JWT,
-        //    and "Content-Type". Add any other custom headers your frontend sends.
         configuration.setAllowedHeaders(Arrays.asList(
                 "Authorization",
                 "Cache-Control",
                 "Content-Type",
                 "Accept",
-                "X-Requested-With",
-                "*"
-                // Add any other headers needed by your frontend
+                "X-Requested-With"
         ));
 
-        // 4. Allow credentials (cookies, Authorization headers)
-        //    Required if your frontend sends credentials.
         configuration.setAllowCredentials(true);
 
-        // 5. (Optional) Specify exposed headers
-        //    If your frontend needs to read headers from the response (e.g., a custom header)
-        // configuration.setExposedHeaders(List.of("Custom-Header"));
-
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        // Apply this configuration to all paths /**
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
@@ -132,12 +124,12 @@ public class SecurityConfiguration {
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration
-    ) throws Exception{
+    ) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
-    PasswordEncoder passwordEncoder(){
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
