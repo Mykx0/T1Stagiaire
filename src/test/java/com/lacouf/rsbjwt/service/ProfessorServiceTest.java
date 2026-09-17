@@ -117,7 +117,6 @@ class ProfessorServiceTest {
     void updateProfessor_shouldUpdateFields() {
         dto.setDiscipline("Computer Science");
         dto.setPassword(null);
-        // email 不变 → 不需要 stub findUserAppByEmail
 
         when(professorRepository.findById(1L)).thenReturn(Optional.of(professor));
         when(professorRepository.save(professor)).thenReturn(professor);

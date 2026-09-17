@@ -81,7 +81,6 @@ public class SecurityConfiguration {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Allow both common React dev ports
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:3000",   // CRA
                 "http://localhost:5173"    // Vite
