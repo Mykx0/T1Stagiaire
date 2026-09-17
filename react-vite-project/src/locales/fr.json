@@ -21,6 +21,10 @@
       "discipline": {
         "label": "Discipline"
       },
+      "school": {
+        "label": "École",
+        "placeholder": "Votre école"
+      },
       "password": {
         "label": "Mot de passe"
       },

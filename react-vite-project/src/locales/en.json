@@ -22,6 +22,10 @@
         "label": "Discipline",
         "placeholder": "Your discipline"
       },
+        "school": {
+            "label": "School",
+            "placeholder": "Your school"
+        },
       "password": {
         "label": "Password"
       },

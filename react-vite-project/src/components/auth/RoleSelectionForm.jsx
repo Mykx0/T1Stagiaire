@@ -85,9 +85,7 @@ export default function RoleSelectionForm() {
                             ← {t('roleSelection.backButton')}
                         </button>
 
-                        {selectedRole === ROLES.STUDENT && <RegisterPage role={selectedRole} />}
-                        {selectedRole === ROLES.TEACHER && <RegisterPage role={selectedRole}/>}
-                        {selectedRole === ROLES.EMPLOYER && <RegisterPage role={selectedRole}/>}
+                        <RegisterPage role={selectedRole} />
                     </div>
                 )}
 
