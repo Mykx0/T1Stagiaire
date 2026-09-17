@@ -127,6 +127,16 @@ const RegisterPage = ({role}) => {
                     ))}
                     {error && <p className="error">{t(error)}</p>}
                     {simulationResponse && <p className="simulationResponse">{simulationResponse}</p>}
+                    <div className="space-x-1">
+                    <input type="checkbox" id="terms" name="terms" required />
+                        <label htmlFor="terms">
+                            Acceptez les
+                        </label>
+                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                            termes et conditions
+                        </a>
+                    </div>
+
                     <button type="submit"
                             className={`${disableButton ? 'btn-disabled' : 'btn-active'} btn`}
                             disabled={disableButton}>
