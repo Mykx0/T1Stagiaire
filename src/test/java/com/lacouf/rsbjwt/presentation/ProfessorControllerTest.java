@@ -45,7 +45,7 @@ class ProfessorControllerTest {
 
         when(userService.registerProfessor(any(ProfessorDTO.class))).thenReturn(response);
 
-        mockMvc.perform(post("/api/professor/register")
+        mockMvc.perform(post("/api/register/prof")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -72,7 +72,7 @@ class ProfessorControllerTest {
         when(userService.registerProfessor(any(ProfessorDTO.class)))
                 .thenThrow(new EmailAlreadyUsedException("jean.tremblay@example.com"));
 
-        mockMvc.perform(post("/api/professor/register")
+        mockMvc.perform(post("/api/register/prof")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isConflict())
@@ -92,7 +92,7 @@ class ProfessorControllerTest {
         when(userService.registerProfessor(any(ProfessorDTO.class)))
                 .thenThrow(new RuntimeException("boom"));
 
-        mockMvc.perform(post("/api/professor/register")
+        mockMvc.perform(post("/api/register/prof")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isInternalServerError())
@@ -102,32 +102,11 @@ class ProfessorControllerTest {
 
 
     @Test
-    void getEmailById_shouldReturnEmail() throws Exception {
-        when(userService.getProfessorEmailById(1L))
-                .thenReturn("jean.tremblay@example.com");
-
-        mockMvc.perform(get("/api/professor/1/email"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("jean.tremblay@example.com"));
-    }
-
-    @Test
-    void getEmailById_shouldReturnNotFound() throws Exception {
-        when(userService.getProfessorEmailById(99L))
-                .thenThrow(new ProfessorNotFoundException(99L));
-
-        mockMvc.perform(get("/api/professor/99/email"))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.error").value("Professor not found"))
-                .andExpect(jsonPath("$.message").exists());
-    }
-
-    @Test
     void getEmailByName_shouldReturnEmail() throws Exception {
         when(userService.getProfessorEmailByName("Jean", "Tremblay"))
                 .thenReturn("jean.tremblay@example.com");
 
-        mockMvc.perform(get("/api/professor/email")
+        mockMvc.perform(get("/api/prof/email")
                         .param("firstName", "Jean")
                         .param("lastName", "Tremblay"))
                 .andExpect(status().isOk())
@@ -139,7 +118,7 @@ class ProfessorControllerTest {
         when(userService.getProfessorEmailByName("Unknown", "Person"))
                 .thenThrow(new ProfessorNotFoundException("No professor found for Unknown Person"));
 
-        mockMvc.perform(get("/api/professor/email")
+        mockMvc.perform(get("/api/prof/email")
                         .param("firstName", "Unknown")
                         .param("lastName", "Person"))
                 .andExpect(status().isNotFound())

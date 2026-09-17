@@ -37,7 +37,7 @@ public class ProfService {
         this.professorMapper = professorMapper;
     }
 
-    public ProfessorDTO registerProfessor(ProfessorDTO dto) {
+    public ProfessorDTO registerProfessor(ProfessorDTO dto) throws EmailAlreadyUsedException {
         String email = dto.getEmail().trim().toLowerCase();
 
         if (userAppRepository.findUserAppByEmail(email).isPresent()) {
@@ -55,7 +55,7 @@ public class ProfService {
     }
 
 
-    public ProfessorDTO updateProfessor(Long id, ProfessorDTO dto) {
+    public ProfessorDTO updateProfessor(Long id, ProfessorDTO dto) throws ProfessorNotFoundException, EmailAlreadyUsedException {
         Professor professor = professorRepository.findById(id)
                 .orElseThrow(() -> new ProfessorNotFoundException(id));
 
@@ -82,13 +82,13 @@ public class ProfService {
     }
 
 
-    public String getProfessorEmailById(Long id) {
+    public String getProfessorEmailById(Long id) throws ProfessorNotFoundException {
         Professor professor = professorRepository.findById(id)
                 .orElseThrow(() -> new ProfessorNotFoundException(id));
         return professor.getEmail();
     }
 
-    public String getProfessorEmailByName(String firstName, String lastName) {
+    public String getProfessorEmailByName(String firstName, String lastName) throws ProfessorNotFoundException {
         List<Professor> professors = professorRepository.findByFullName(firstName, lastName);
         if (professors.isEmpty()) {
             throw new ProfessorNotFoundException(

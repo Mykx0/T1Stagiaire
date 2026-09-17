@@ -64,7 +64,7 @@ class ProfessorServiceTest {
     }
 
     @Test
-    void registerProfessor_shouldSaveAndReturnDto() {
+    void registerProfessor_shouldSaveAndReturnDto() throws EmailAlreadyUsedException {
         when(userAppRepository.findUserAppByEmail("jean.tremblay@example.com"))
                 .thenReturn(Optional.empty());
         when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
@@ -86,7 +86,7 @@ class ProfessorServiceTest {
     }
 
     @Test
-    void registerProfessor_shouldNormalizeEmail() {
+    void registerProfessor_shouldNormalizeEmail() throws EmailAlreadyUsedException {
         dto.setEmail("  JEAN.TREMBLAY@EXAMPLE.COM  ");
 
         when(userAppRepository.findUserAppByEmail("jean.tremblay@example.com"))
@@ -114,7 +114,7 @@ class ProfessorServiceTest {
     }
 
     @Test
-    void updateProfessor_shouldUpdateFields() {
+    void updateProfessor_shouldUpdateFields() throws ProfessorNotFoundException, EmailAlreadyUsedException {
         dto.setDiscipline("Computer Science");
         dto.setPassword(null);
 
@@ -132,7 +132,7 @@ class ProfessorServiceTest {
     }
 
     @Test
-    void updateProfessor_shouldKeepOldPasswordWhenBlank() {
+    void updateProfessor_shouldKeepOldPasswordWhenBlank() throws ProfessorNotFoundException, EmailAlreadyUsedException {
         dto.setPassword("");
         when(professorRepository.findById(1L)).thenReturn(Optional.of(professor));
         when(professorRepository.save(any())).thenReturn(professor);
@@ -145,7 +145,7 @@ class ProfessorServiceTest {
     }
 
     @Test
-    void updateProfessor_shouldEncodeNewPassword() {
+    void updateProfessor_shouldEncodeNewPassword() throws ProfessorNotFoundException, EmailAlreadyUsedException {
         dto.setPassword("newSecret");
         when(professorRepository.findById(1L)).thenReturn(Optional.of(professor));
         when(passwordEncoder.encode("newSecret")).thenReturn("newEncoded");
@@ -159,7 +159,7 @@ class ProfessorServiceTest {
     }
 
     @Test
-    void updateProfessor_shouldChangeEmailWhenNotUsed() {
+    void updateProfessor_shouldChangeEmailWhenNotUsed() throws ProfessorNotFoundException, EmailAlreadyUsedException {
         dto.setEmail("new.email@example.com");
 
         when(professorRepository.findById(1L)).thenReturn(Optional.of(professor));
@@ -199,7 +199,7 @@ class ProfessorServiceTest {
     }
 
     @Test
-    void getProfessorEmailById_shouldReturnEmail() {
+    void getProfessorEmailById_shouldReturnEmail() throws ProfessorNotFoundException {
         when(professorRepository.findById(1L)).thenReturn(Optional.of(professor));
 
         String email = userService.getProfessorEmailById(1L);
@@ -216,7 +216,7 @@ class ProfessorServiceTest {
     }
 
     @Test
-    void getProfessorEmailByName_shouldReturnFirstMatch() {
+    void getProfessorEmailByName_shouldReturnFirstMatch() throws ProfessorNotFoundException {
         when(professorRepository.findByFullName("Jean", "Tremblay"))
                 .thenReturn(List.of(professor));
 

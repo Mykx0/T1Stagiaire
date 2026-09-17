@@ -82,8 +82,7 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(
-                "http://localhost:3000",   // CRA
-                "http://localhost:5173"    // Vite
+                "http://localhost:3000" // CRA
         ));
 
         configuration.setAllowedMethods(Arrays.asList(
