@@ -1,20 +1,23 @@
 package com.lacouf.rsbjwt.model.auth;
 
+import com.lacouf.rsbjwt.model.Student;
+
 import java.util.HashSet;
 import java.util.Set;
 
 public enum Role{
-	GESTIONNAIRE("ROLE_GESTIONNAIRE"),
-	PREPOSE("ROLE_PREPOSE"),
-	EMPRUNTEUR("ROLE_EMPRUNTEUR"),
+	INTERNSHIP_MANAGER("ROLE_INTERNSHIP_MANAGER"),
+	PROFESSOR("ROLE_PROFESSOR"),
+	EMPLOYER("ROLE_EMPLOYER"),
+	STUDENT("ROLE_STUDENT")
 	;
 
 	private final String string;
 	private final Set<Role> managedRoles = new HashSet<>();
 
 	static{
-		GESTIONNAIRE.managedRoles.add(PREPOSE);
-		GESTIONNAIRE.managedRoles.add(EMPRUNTEUR);
+		INTERNSHIP_MANAGER.managedRoles.add(PROFESSOR);
+		INTERNSHIP_MANAGER.managedRoles.add(STUDENT);
 	}
 
 	Role(String string){
