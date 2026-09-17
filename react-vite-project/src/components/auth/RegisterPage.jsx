@@ -94,7 +94,7 @@ const RegisterPage = ({role}) => {
             const data = {...values}
             delete data.passwordConfirmation;
             console.log(data);
-            const response = await axiosClient.post(ROLE_CONFIG.student.endpoint, data);
+            const response = await axiosClient.post(ROLE_CONFIG[role].endpoint, data);
             setValues(getInitialValues());
             setSimulationResponse(JSON.stringify(response.data));
         }catch(e){

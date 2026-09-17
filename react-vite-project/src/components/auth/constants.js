@@ -24,7 +24,9 @@ export const ROLE_CONFIG={
         extraInputs:[]
     },
     employer:{
-        endpoint: '/employer/employer',
-        extraInputs:[]
+        endpoint: '/register/employer',
+        extraInputs:[
+            {id: 5, label: 'register.inputs.company.label', type: "text", placeholder: 'register.inputs.company.placeholder', name: "company"},
+        ]
     }
 }

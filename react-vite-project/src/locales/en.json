@@ -26,6 +26,10 @@
         "label": "Discipline",
         "placeholder": "Your discipline"
       },
+      "company":{
+        "label": "Company",
+        "placeholder": "Your company"
+      },
       "password": {
         "label": "Password"
       },
