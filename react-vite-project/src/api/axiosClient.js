@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-    baseURL: "http://localhost:8080",
+    baseURL: "http://localhost:8080/api",
     timeout: 5000,
     headers: {
         'Content-Type': 'application/json',
@@ -35,3 +35,5 @@ axiosClient.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+
+export default axiosClient;
