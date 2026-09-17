@@ -1,0 +1,66 @@
+{
+  "register": {
+    "title": "Create an Account",
+    "subtitle": "Enter your information to sign up",
+    "submitButton": "Sign up as a student",
+    "submitting": "Signing up...",
+    "successMessage": "Registration successful! You can now log in.\nData sent:",
+    "inputs": {
+      "lastName": {
+        "label": "Last name",
+        "placeholder": "Your last name"
+      },
+      "firstName": {
+        "label": "First name",
+        "placeholder": "Your first name"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "you@example.com"
+      },
+      "discipline": {
+        "label": "Discipline",
+        "placeholder": "Your discipline"
+      },
+      "password": {
+        "label": "Password"
+      },
+      "confirmPassword": {
+        "label": "Confirm password"
+      }
+    },
+    "errors": {
+      "allFieldsRequired": "Please fill in all fields",
+      "nameMinLength": "First and last name must contain at least 1 character",
+      "invalidMatricule": "ID number must contain exactly 7 digits",
+      "invalidEmail": "Please enter a valid email address",
+      "passwordMinLength": "Password must be at least 8 characters long",
+      "passwordMismatch": "Passwords do not match",
+      "genericError": "An error occurred during registration"
+    },
+    "discipline": {
+      "computerScience": "Computer Science",
+      "nursing": "Nursing",
+      "electricalEngineering": "Electrical Engineering"
+    }
+  },
+  "roles": {
+    "student": {
+      "title": "Student",
+      "description": "Find internship opportunities"
+    },
+    "teacher": {
+      "title": "Teacher",
+      "description": "Manage your students"
+    },
+    "employer": {
+      "title": "Employer",
+      "description": "Post job offers and recruit"
+    }
+  },
+  "roleSelection": {
+      "title": "Choose your profile",
+      "subtitle": "Select your profile to display the corresponding registration form",
+      "backButton": "Change role"
+  }
+}

@@ -1,24 +1,20 @@
 package com.lacouf.rsbjwt;
 
-import com.lacouf.rsbjwt.model.*;
+import com.lacouf.rsbjwt.model.Discipline;
+import com.lacouf.rsbjwt.repository.StudentRepository;
 import com.lacouf.rsbjwt.repository.UserAppRepository;
+import com.lacouf.rsbjwt.repository.UserRepository;
+import com.lacouf.rsbjwt.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDate;
-import java.util.Optional;
-
 @SpringBootApplication
 public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
     // Edouard Lambert
-    private final UserAppRepository userAppRepository;
-    private final PasswordEncoder passwordEncoder;
+    public ReactSpringSecurityJwtApplication() {
 
-    public ReactSpringSecurityJwtApplication( UserAppRepository userAppRepository, PasswordEncoder passwordEncoder) {
-        this.userAppRepository = userAppRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     public static void main(String[] args) {
@@ -27,9 +23,6 @@ public class ReactSpringSecurityJwtApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
-        final Optional<UserApp> userAppByEmail = userAppRepository.findUserAppByEmail("l@l.com");
-        userAppByEmail.ifPresent(userApp -> System.out.println("user " + userAppByEmail));
 
     }
 }
