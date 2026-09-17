@@ -13,8 +13,7 @@ public abstract class Utilisateur {
     private String email;
     private String password;
 
-    public Utilisateur(Long id, String name, String surname, String email, String password) {
-        this.id = id;
+    public Utilisateur(String name, String surname, String email, String password) {
         this.name = name;
         this.surname = surname;
         this.email = email;
