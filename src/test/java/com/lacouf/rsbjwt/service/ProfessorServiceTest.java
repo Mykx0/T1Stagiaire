@@ -6,6 +6,7 @@ import com.lacouf.rsbjwt.model.auth.Credentials;
 import com.lacouf.rsbjwt.model.auth.Role;
 import com.lacouf.rsbjwt.repository.ProfessorRepository;
 import com.lacouf.rsbjwt.repository.UserAppRepository;
+import com.lacouf.rsbjwt.repository.UserRepository;
 import com.lacouf.rsbjwt.security.exception.EmailAlreadyUsedException;
 import com.lacouf.rsbjwt.security.exception.ProfessorNotFoundException;
 import com.lacouf.rsbjwt.service.dto.ProfessorDTO;
@@ -28,7 +29,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ProfessorServiceTest {
 
-    @Mock private UserAppRepository userAppRepository;
+    @Mock private UserRepository userRepository;
     @Mock private ProfessorRepository professorRepository;
     @Mock private PasswordEncoder passwordEncoder;
 
@@ -39,7 +40,7 @@ class ProfessorServiceTest {
     @BeforeEach
     void setUp() throws Exception {
         profService = new ProfService(
-                userAppRepository,
+                userRepository,
                 professorRepository,
                 passwordEncoder,
                 new ProfessorDTO.Mapper()
@@ -64,7 +65,7 @@ class ProfessorServiceTest {
                 Role.PROFESSOR,
                 "password123");
 
-        when(userAppRepository.findUserAppByEmail("jean.tremblay@example.com"))
+        when(userRepository.findUserAppByEmail("jean.tremblay@example.com"))
                 .thenReturn(Optional.empty());
         when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
         when(professorRepository.save(any(Professor.class)))
@@ -76,7 +77,7 @@ class ProfessorServiceTest {
         assertThat(result.email()).isEqualTo("jean.tremblay@example.com");
         assertThat(result.discipline()).isEqualTo(Discipline.ElectricalEngineering);
 
-        verify(userAppRepository).findUserAppByEmail("jean.tremblay@example.com");
+        verify(userRepository).findUserAppByEmail("jean.tremblay@example.com");
         verify(passwordEncoder).encode("password123");
         verify(professorRepository).save(any(Professor.class));
     }
@@ -90,14 +91,14 @@ class ProfessorServiceTest {
                 Role.PROFESSOR,
                 "password123");
 
-        when(userAppRepository.findUserAppByEmail("leblanc.jean@example.com"))
+        when(userRepository.findUserAppByEmail("leblanc.jean@example.com"))
                 .thenReturn(Optional.empty());
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
         when(professorRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
         profService.registerProfessor(request);
 
-        verify(userAppRepository).findUserAppByEmail("leblanc.jean@example.com");
+        verify(userRepository).findUserAppByEmail("leblanc.jean@example.com");
     }
 
     @Test
@@ -109,7 +110,7 @@ class ProfessorServiceTest {
                 Role.PROFESSOR,
                 "password123");
 
-        when(userAppRepository.findUserAppByEmail("jean.tremblay@example.com"))
+        when(userRepository.findUserAppByEmail("jean.tremblay@example.com"))
                 .thenReturn(Optional.of(professor));
 
         assertThatThrownBy(() -> profService.registerProfessor(request))

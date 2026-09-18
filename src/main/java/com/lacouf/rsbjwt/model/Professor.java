@@ -3,13 +3,11 @@ package com.lacouf.rsbjwt.model;
 import com.lacouf.rsbjwt.model.auth.Credentials;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
 
 @Entity
-@PrimaryKeyJoinColumn(name = "id")
-public class Professor extends UserApp {
+public class Professor extends User {
 
-    @Column(nullable = false)
+    @Column(name = "discipline")
     private Discipline discipline;
 
     public Professor() {
@@ -21,10 +19,21 @@ public class Professor extends UserApp {
             Credentials credentials,
             Discipline discipline
     ) {
-        super(firstName, lastName, credentials);
+        super(
+                firstName,
+                lastName,
+                credentials.getEmail(),
+                credentials.getPassword(),
+                credentials.getRole()
+        );
         this.discipline = discipline;
     }
 
-    public Discipline getDiscipline() { return discipline; }
-    public void setDiscipline(Discipline discipline) { this.discipline = discipline; }
+    public Discipline getDiscipline() {
+        return discipline;
+    }
+
+    public void setDiscipline(Discipline discipline) {
+        this.discipline = discipline;
+    }
 }
