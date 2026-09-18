@@ -1,7 +1,6 @@
-package com.lacouf.rsbjwt.controller;
+package com.lacouf.rsbjwt.presentation;
 
 import com.lacouf.rsbjwt.security.exception.EmailAlreadyUsedException;
-import com.lacouf.rsbjwt.security.exception.ProfessorNotFoundException;
 import com.lacouf.rsbjwt.service.ProfService;
 import com.lacouf.rsbjwt.service.dto.ErrorResponse;
 import com.lacouf.rsbjwt.service.dto.ProfessorDTO;

@@ -1,7 +1,7 @@
 package com.lacouf.rsbjwt.presentation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lacouf.rsbjwt.controller.ProfessorController;
+import com.lacouf.rsbjwt.model.Discipline;
 import com.lacouf.rsbjwt.model.auth.Role;
 import com.lacouf.rsbjwt.security.exception.EmailAlreadyUsedException;
 import com.lacouf.rsbjwt.service.ProfService;
@@ -30,7 +30,6 @@ class ProfessorControllerTest {
     @MockitoBean
     private ProfService profService;
 
-
     @Test
     void register_shouldReturnCreated() throws Exception {
         ProfessorDTO request = new ProfessorDTO(
@@ -38,7 +37,7 @@ class ProfessorControllerTest {
                 "Jean",
                 "Tremblay",
                 "jean.tremblay@example.com",
-                "Software Engineering",
+                Discipline.ComputerScience,
                 Role.PROFESSOR,
                 "password123"
         );
@@ -48,7 +47,7 @@ class ProfessorControllerTest {
                 "Jean",
                 "Tremblay",
                 "jean.tremblay@example.com",
-                "Software Engineering",
+                Discipline.Nursing,
                 Role.PROFESSOR,
                 null
         );
@@ -63,8 +62,8 @@ class ProfessorControllerTest {
                 .andExpect(jsonPath("$.firstName").value("Jean"))
                 .andExpect(jsonPath("$.lastName").value("Tremblay"))
                 .andExpect(jsonPath("$.email").value("jean.tremblay@example.com"))
-                .andExpect(jsonPath("$.discipline").value("Software Engineering"))
-                .andExpect(jsonPath("$.role").value("PROFESSOR"))
+                .andExpect(jsonPath("$.discipline").value("Nursing"))
+                .andExpect(jsonPath("$.role").value("ROLE_PROFESSOR"))
                 .andExpect(jsonPath("$.password").doesNotExist());
 
         verify(profService).registerProfessor(any(ProfessorDTO.class));
@@ -77,7 +76,7 @@ class ProfessorControllerTest {
                 "Jean",
                 "Tremblay",
                 "jean.tremblay@example.com",
-                "Software Engineering",
+                Discipline.ComputerScience,
                 Role.PROFESSOR,
                 "password123"
         );
@@ -100,7 +99,7 @@ class ProfessorControllerTest {
                 "Jean",
                 "Tremblay",
                 "jean.tremblay@example.com",
-                "Software Engineering",
+                Discipline.ComputerScience,
                 Role.PROFESSOR,
                 "password123"
         );
@@ -123,7 +122,7 @@ class ProfessorControllerTest {
                 "Jean",
                 "Tremblay",
                 "jean.tremblay@example.com",
-                "Software Engineering",
+                Discipline.ComputerScience,
                 Role.PROFESSOR,
                 "password123"
         );

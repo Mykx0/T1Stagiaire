@@ -56,6 +56,8 @@ public class SecurityConfiguration {
     private static final String GESTIONNAIRE_PATH = "/gestionnaire/**";
     private static final String STUDENT_CREATE_PATH = "/api/register/student";
     private static final String USER_EMAIL_CHECK_PATH = "/api/user/checkEmail";
+    private static final String PROFESSOR_REGISTER_PATH = "/api/register/prof";
+
 
 
 
@@ -69,6 +71,7 @@ public class SecurityConfiguration {
                         .requestMatchers(POST, EMPRUNTEUR_REGISTER_PATH).permitAll()
                         .requestMatchers(POST, PREPOSE_REGISTER_PATH).permitAll()
                         .requestMatchers(POST, STUDENT_CREATE_PATH).permitAll()
+                        .requestMatchers(POST, PROFESSOR_REGISTER_PATH).permitAll()
                         .requestMatchers(GET, USER_EMAIL_CHECK_PATH).permitAll()
 //                        .requestMatchers(GET, "/api/user/student/**").permitAll() Pour tester. Ne pas garder en prod
                         .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll() // Allow CORS preflight requests

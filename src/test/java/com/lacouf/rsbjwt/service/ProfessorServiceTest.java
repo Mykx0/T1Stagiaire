@@ -1,5 +1,6 @@
 package com.lacouf.rsbjwt.service;
 
+import com.lacouf.rsbjwt.model.Discipline;
 import com.lacouf.rsbjwt.model.Professor;
 import com.lacouf.rsbjwt.model.auth.Credentials;
 import com.lacouf.rsbjwt.model.auth.Role;
@@ -47,7 +48,7 @@ class ProfessorServiceTest {
         Credentials credentials = new Credentials(
                 "jean.tremblay@example.com", "encodedPassword", Role.PROFESSOR);
 
-        professor = new Professor("Jean", "Tremblay", credentials, "Software Engineering");
+        professor = new Professor("Jean", "Tremblay", credentials, Discipline.ComputerScience);
 
         Field idField = professor.getClass().getSuperclass().getDeclaredField("id");
         idField.setAccessible(true);
@@ -59,7 +60,7 @@ class ProfessorServiceTest {
         ProfessorDTO request = new ProfessorDTO(
                 null, "Jean", "Tremblay",
                 "jean.tremblay@example.com",
-                "Software Engineering",
+                Discipline.ElectricalEngineering,
                 Role.PROFESSOR,
                 "password123");
 
@@ -73,7 +74,7 @@ class ProfessorServiceTest {
 
         assertThat(result).isNotNull();
         assertThat(result.email()).isEqualTo("jean.tremblay@example.com");
-        assertThat(result.discipline()).isEqualTo("Software Engineering");
+        assertThat(result.discipline()).isEqualTo(Discipline.ElectricalEngineering);
 
         verify(userAppRepository).findUserAppByEmail("jean.tremblay@example.com");
         verify(passwordEncoder).encode("password123");
@@ -85,7 +86,7 @@ class ProfessorServiceTest {
         ProfessorDTO request = new ProfessorDTO(
                 null, "LeBlanc", "Jean",
                 "  LEBLANC.JEAN@EXAMPLE.COM  ",
-                "IT",
+                Discipline.ElectricalEngineering,
                 Role.PROFESSOR,
                 "password123");
 
@@ -104,7 +105,7 @@ class ProfessorServiceTest {
         ProfessorDTO request = new ProfessorDTO(
                 null, "Jean", "Tremblay",
                 "jean.tremblay@example.com",
-                "Software Engineering",
+                Discipline.ElectricalEngineering,
                 Role.PROFESSOR,
                 "password123");
 

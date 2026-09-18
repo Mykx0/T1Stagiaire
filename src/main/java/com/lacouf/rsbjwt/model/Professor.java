@@ -10,7 +10,7 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 public class Professor extends UserApp {
 
     @Column(nullable = false)
-    private String discipline;
+    private Discipline discipline;
 
     public Professor() {
     }
@@ -19,12 +19,12 @@ public class Professor extends UserApp {
             String firstName,
             String lastName,
             Credentials credentials,
-            String discipline
+            Discipline discipline
     ) {
         super(firstName, lastName, credentials);
         this.discipline = discipline;
     }
 
-    public String getDiscipline() { return discipline; }
-    public void setDiscipline(String discipline) { this.discipline = discipline; }
+    public Discipline getDiscipline() { return discipline; }
+    public void setDiscipline(Discipline discipline) { this.discipline = discipline; }
 }
