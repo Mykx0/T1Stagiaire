@@ -4,6 +4,7 @@ import com.lacouf.rsbjwt.model.Discipline;
 import com.lacouf.rsbjwt.model.Student;
 import com.lacouf.rsbjwt.repository.StudentRepository;
 import com.lacouf.rsbjwt.repository.UserRepository;
+import com.lacouf.rsbjwt.service.StudentService;
 import com.lacouf.rsbjwt.service.UserService;
 import com.lacouf.rsbjwt.service.dto.UserDTO;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,9 @@ public class StudentServiceTest {
     @InjectMocks
     private UserService userService;
 
+    @InjectMocks
+    private StudentService studentService;
+
     @Test
     public void testFindStudent () {
         Student mockStudent = new Student("edouard", "lambert", "asdasd@gmail.com","password", Discipline.ComputerScience);
@@ -52,7 +56,7 @@ public class StudentServiceTest {
         when(passwordEncoder.encode("password")).thenReturn("passwordEncoded");
         when(studentRepository.save(Mockito.any(Student.class))).thenReturn(mockStudent);
 
-        UserDTO dto = userService.createStudent
+        UserDTO dto = studentService.createStudent
                 ("edouard", "lambert", "asdasd@gmail.com", "password", Discipline.ComputerScience);
 
         assertNotNull(dto);

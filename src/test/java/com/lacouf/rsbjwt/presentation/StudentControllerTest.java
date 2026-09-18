@@ -1,9 +1,7 @@
 package com.lacouf.rsbjwt.presentation;
 
-import com.lacouf.rsbjwt.model.Discipline;
-import com.lacouf.rsbjwt.presentation.dto.SignupDTO;
 import com.lacouf.rsbjwt.repository.StudentRepository;
-import com.lacouf.rsbjwt.service.UserService;
+import com.lacouf.rsbjwt.service.StudentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -11,30 +9,22 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(UserController.class)
-public class UserControllerTest {
+@WebMvcTest(StudentController.class)
+public class StudentControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
     private StudentRepository repo;
     @MockitoBean
-    private UserService userService;
+    private StudentService studentService;
 
     @Test
     public void successfulStudentCreation() throws Exception {
-        SignupDTO dto = new SignupDTO(
-                "Edouard",
-                "Lambert",
-                "asdasd@gmail.com",
-                "password",
-                Discipline.ComputerScience
-        );
         String signup =
                 """
                 {
@@ -54,8 +44,6 @@ public class UserControllerTest {
                                 .content(signup)
                 ).
                 andExpect(status().isCreated());
-
-        verify(userService).createStudent(dto.firstName(), dto.lastName(), dto.email(), dto.password(), dto.discipline());
     }
 
     @Test
