@@ -1,13 +1,11 @@
 package com.lacouf.rsbjwt.presentation;
 
-import com.lacouf.rsbjwt.presentation.dto.SignupDTO;
 import com.lacouf.rsbjwt.service.UserService;
 import com.lacouf.rsbjwt.service.dto.UserDTO;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/api")
@@ -23,22 +21,9 @@ public class UserController {
         return ResponseEntity.ok(userService.getUser(id));
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<UserDTO> getUserWithEmail(@Email @RequestBody String email) {
-        var dto = userService.getUserWithEmail(email);
-        return ResponseEntity.ok(dto);
-    }
-
-    @PostMapping("/register/student")
-    @CrossOrigin( origins = "http://localhost:3000")
-    public ResponseEntity<UserDTO> createStudent(@Valid @RequestBody SignupDTO info) {
-        var dto = userService.createStudent(
-                    info.firstName(),
-                    info.lastName(),
-                    info.email(),
-                    info.password(),
-                    info.discipline()
-        );
-        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+    @GetMapping("/user/checkEmail")
+    public ResponseEntity<Boolean> isEmailUsed(@Email @RequestParam String email) {
+        boolean isUsed = userService.isEmailUsed(email);
+        return ResponseEntity.ok(isUsed);
     }
 }

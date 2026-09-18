@@ -28,7 +28,8 @@ axiosClient.interceptors.response.use(
         return response;
     },
     (error)=>{
-        if (error.response && error.response.status === 401|| error.response.status === 403) {
+        const status = error.response && error.response.status;
+        if (status === 401|| status === 403) {
             // Rediriger vers la page de connexion (plus tard)
             localStorage.removeItem('auth_token');
         }

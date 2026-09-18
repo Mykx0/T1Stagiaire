@@ -6,6 +6,8 @@ const FormInputs = ({placeholder, type, value, onChange, name, label, options}) 
     const [isOpen, setIsOpen] = useState(false);
     const isSelectType = type === 'select';
 
+    const selectedOption = options?.find(opt => opt.value === value);
+
     return (
         <div className={"formInputs"}>
             <label className="labels">
@@ -20,7 +22,7 @@ const FormInputs = ({placeholder, type, value, onChange, name, label, options}) 
                             onClick={() => setIsOpen(!isOpen)}
                             className="inputs px-3 py-2 ease shadow-sm outline-none transition-all w-full flex items-center justify-between cursor-pointer capitalize text-left"
                         >
-                            <span>{(value ? String(value) : placeholder || 'Sélectionner...').toLowerCase().replace(/_/g, ' ')}</span>
+                            <span>{selectedOption ? selectedOption.label : (placeholder || 'Sélectionner...')}</span>
                             <svg className={`size-4 text-kingfisher-daisy-600 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>
                                 <use href={"/sprite.svg#arrowDown"}/>
                             </svg>
@@ -35,18 +37,18 @@ const FormInputs = ({placeholder, type, value, onChange, name, label, options}) 
                              scrollbar-thin scrollbar-thumb-kingfisher-daisy-600">
                                     {options?.map((option) => (
                                         <li
-                                            key={option}
+                                            key={option.value}
                                             onClick={() => {
-                                                onChange({ target: { name, value: option } } );
+                                                onChange({ target: { name, value: option.value } } );
                                                 setIsOpen(false);
                                             }}
                                             className={`px-3 py-2 text-sm rounded-lg cursor-pointer capitalize transition-colors select-none
-                                ${value === option
+                                ${value === option.value
                                                 ? 'bg-kingfisher-daisy-200 text-kingfisher-daisy-600 font-bold'
                                                 : 'text-slate-700 hover:bg-kingfisher-daisy-200 hover:text-kingfisher-daisy-600'
                                             }`}
                                         >
-                                            {option.toLowerCase()}
+                                            {option.label}
                                         </li>
                                     ))}
                                 </ul>

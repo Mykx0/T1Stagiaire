@@ -1,35 +1,44 @@
 import React, {useState} from 'react';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import FormInputs from "../FormInputs.jsx";
 import axiosClient from "../../api/axiosClient.js";
+import {COMMON_INPUTS, ROLE_CONFIG} from "./constants.js";
 
 
-const RegisterPage = () => {
+const RegisterPage = ({role}) => {
     const { t } = useTranslation();
 
-    const Discipline = {
+    const DisciplineLabels = {
         ComputerScience: t('register.discipline.computerScience'),
-        Nursing: t("register.discipline.nursing"),
-        ElectricalEngineering: t("register.discipline.electricalEngineering")
-    }
+        Nursing: t('register.discipline.nursing'),
+        ElectricalEngineering: t('register.discipline.electricalEngineering')
+    };
 
-    const INPUTS = [
-        {id: 1, label: t('register.inputs.lastName.label'), type: "text", placeholder: t('register.inputs.lastName.placeholder'), name: "last_name"},
-        {id: 2, label: t('register.inputs.firstName.label'), type: "text", placeholder: t('register.inputs.firstName.placeholder'), name: "first_name"},
-        {id: 3, label: t('register.inputs.email.label'), type: "email", placeholder: t('register.inputs.email.placeholder'), name: "email"},
-        {id: 5, label: t('register.inputs.discipline.label'), type: "select", placeholder: t('register.inputs.discipline.placeholder'), name: "discipline", options: Object.values(Discipline)},
-        {id: 6, label: t('register.inputs.password.label'), type: "password", placeholder: "•••••", name: "password"},
-        {id: 7, label: t('register.inputs.confirmPassword.label'), type: "password", placeholder: "•••••", name: "passwordConfirmation"}
-    ];
+    const currentConfig = ROLE_CONFIG[role];
 
-    const [values, setValues] = useState({
-        last_name: '',
-        first_name: '',
-        email: '',
-        discipline: Discipline.ComputerScience,
-        password: '',
-        passwordConfirmation: ''
+    const ACTIVE_INPUTS = [...COMMON_INPUTS, ...(currentConfig?.extraInputs || [])].map(input => {
+        if (input.type === 'select' && input.optionKeys) {
+            return {
+                ...input,
+                options: input.optionKeys.map(key => ({
+                    value: key,
+                    label: DisciplineLabels[key] ?? key
+                }))
+            };
+        }
+        return input;
     });
+
+    const getInitialValues = () => {
+        const initial = {};
+        ACTIVE_INPUTS.forEach(input => {
+            initial[input.name] = input.type === 'select' && input.options
+                ? input.options[0].value
+                : '';
+        });
+        return initial;
+    };
+    const [values, setValues] = useState(getInitialValues());
 
     const [error, setError] = useState('');
     const [disableButton, setDisableButton] = useState(false);
@@ -41,11 +50,16 @@ const RegisterPage = () => {
     }
 
     const isValid = () => {
-        if (!champsComplets()) {
+        const hasEmptyFields = ACTIVE_INPUTS.some(input =>{
+            const value = values[input.name];
+            return !value || value.toString().trim() === '';
+        });
+
+        if (hasEmptyFields){
             setError('register.errors.allFieldsRequired');
             return false;
         }
-        if(values.last_name.length < 1 || values.first_name.length < 1){
+        if(values.lastName.length < 1 || values.firstName.length < 1){
             setError('register.errors.nameMinLength');
             return false;
         }
@@ -63,9 +77,6 @@ const RegisterPage = () => {
         }
         return true;
     };
-    const champsComplets = () => {
-        return values.last_name !== '' && values.first_name !== '' && values.email !== '' && values.discipline !== '' && values.password !== '' && values.passwordConfirmation !== '';
-    }
     const validateEmail = () => {
         const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
         return emailRegex.test(values.email);
@@ -80,24 +91,12 @@ const RegisterPage = () => {
         setError('');
         try{
             setDisableButton(true);
-            const data = {
-                last_name: values.last_name,
-                first_name: values.first_name,
-                email: values.email,
-                discipline: values.discipline,
-                password: values.password
-            };
-            const response = await axiosClient.post('/register/student', data);
-            console.log(data)
-            setValues({
-                last_name: '',
-                first_name: '',
-                email: '',
-                discipline: Discipline.ComputerScience,
-                password: '',
-                passwordConfirmation: ''
-            });
-            setSimulationResponse( await axiosClient.get(`/${response.data.id}`));
+            const data = {...values}
+            delete data.passwordConfirmation;
+            console.log(data);
+            const response = await axiosClient.post(ROLE_CONFIG.student.endpoint, data);
+            setValues(getInitialValues());
+            setSimulationResponse(JSON.stringify(response.data));
         }catch(e){
             setDisableButton(false);
             setError('register.errors.genericError');
@@ -114,20 +113,30 @@ const RegisterPage = () => {
                 </div>
                 <form onSubmit={handleRegister}
                       className="forms-style">
-                    {INPUTS.map((input)=>(
+                    {ACTIVE_INPUTS.map((input) => (
                        <FormInputs
                             key={input.id}
-                            placeholder={input.placeholder}
+                            placeholder={t(input.placeholder)}
                             type={input.type}
                             value={values[input.name]}
                             onChange={onChange}
                             options={input.options}
                             name={input.name}
-                            label={input.label}
+                            label={t(input.label)}
                       />
                     ))}
                     {error && <p className="error">{t(error)}</p>}
                     {simulationResponse && <p className="simulationResponse">{simulationResponse}</p>}
+                    <div className="space-x-1">
+                    <input type="checkbox" id="terms" name="terms" required />
+                        <label htmlFor="terms">
+                            {t("register.acceptTerms.label")}
+                        </label>
+                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                            {t("register.acceptTerms.linkText")}
+                        </a>
+                    </div>
+
                     <button type="submit"
                             className={`${disableButton ? 'btn-disabled' : 'btn-active'} btn`}
                             disabled={disableButton}>

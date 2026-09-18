@@ -5,6 +5,10 @@
     "submitButton": "Sign up as a student",
     "submitting": "Signing up...",
     "successMessage": "Registration successful! You can now log in.\nData sent:",
+    "acceptTerms": {
+      "label": "Accept",
+      "linkText": "terms and conditions"
+    },
     "inputs": {
       "lastName": {
         "label": "Last name",

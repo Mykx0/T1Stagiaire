@@ -1,39 +1,48 @@
 package com.lacouf.rsbjwt.service;
 
-import com.lacouf.rsbjwt.model.Discipline;
-import com.lacouf.rsbjwt.model.Student;
-import com.lacouf.rsbjwt.repository.StudentRepository;
+import com.lacouf.rsbjwt.model.User;
 import com.lacouf.rsbjwt.repository.UserRepository;
+import com.lacouf.rsbjwt.security.JwtTokenProvider;
+import com.lacouf.rsbjwt.security.exception.UserNotFoundException;
+import com.lacouf.rsbjwt.service.dto.LoginDTO;
 import com.lacouf.rsbjwt.service.dto.UserDTO;
-import jakarta.validation.constraints.Email;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-    private final StudentRepository studentRepo;
+    private final AuthenticationManager authManager;
+    private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepo;
-    private final PasswordEncoder encoder;
 
-    public UserService(StudentRepository studentRepo, UserRepository userRepo, PasswordEncoder encoder) {
-        this.studentRepo = studentRepo;
+    public UserService(UserRepository userRepo, AuthenticationManager authManager, JwtTokenProvider jwtTokenProvider) {
         this.userRepo = userRepo;
-        this.encoder = encoder;
+        this.authManager = authManager;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
-    // Generic user methods
+
     public UserDTO getUser(long id) {
-        return new UserDTO(userRepo.getReferenceById(id));
+        return new UserDTO(userRepo.findById(id).orElseThrow(UserNotFoundException::new));
     }
 
-    public UserDTO getUserWithEmail(@Email String email) {
-        return userRepo.findUserAppByEmail(email)
-                .map(UserDTO::new)
-                .orElse(null);
+    public boolean isEmailUsed(String email) {
+        return userRepo.findUserAppByEmail(email).isPresent();
     }
 
-    // Student specific methods
-    public UserDTO createStudent(String firstName, String lastName, String email, String password, Discipline discipline) {
-        var student = studentRepo.save(new Student(firstName, lastName, email, encoder.encode(password), discipline));
-        return new UserDTO(student);
+    public UserDTO getMe(String token) {
+        token = token.startsWith("Bearer") ? token.substring(7) : token;
+        String email = jwtTokenProvider.getEmailFromJWT(token);
+        User user = userRepo.findUserAppByEmail(email).orElseThrow(UserNotFoundException::new);
+        return new UserDTO(user);
+    }
+
+    public String authenticateUser(LoginDTO loginDto) {
+        Authentication authentication = authManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+        final String token = jwtTokenProvider.generateToken(authentication);
+        System.out.println("JWT Token " + token);
+        return token;
     }
 }

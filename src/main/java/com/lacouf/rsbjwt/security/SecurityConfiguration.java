@@ -1,7 +1,7 @@
 package com.lacouf.rsbjwt.security;
 
 import com.lacouf.rsbjwt.model.auth.Role;
-import com.lacouf.rsbjwt.repository.UserAppRepository;
+import com.lacouf.rsbjwt.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -35,10 +35,10 @@ import static org.springframework.http.HttpMethod.*;
 public class SecurityConfiguration {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserAppRepository userRepository;
+    private final UserRepository userRepository;
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
 
-    public SecurityConfiguration(JwtTokenProvider jwtTokenProvider, UserAppRepository userRepository, JwtAuthenticationEntryPoint authenticationEntryPoint) {
+    public SecurityConfiguration(JwtTokenProvider jwtTokenProvider, UserRepository userRepository, JwtAuthenticationEntryPoint authenticationEntryPoint) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = userRepository;
         this.authenticationEntryPoint = authenticationEntryPoint;
@@ -53,6 +53,7 @@ public class SecurityConfiguration {
     private static final String PREPOSE_PATH = "/prepose/**";
     private static final String GESTIONNAIRE_PATH = "/gestionnaire/**";
     private static final String STUDENT_CREATE_PATH = "/api/register/student";
+    private static final String USER_EMAIL_CHECK_PATH = "/api/user/checkEmail";
 
 
 
@@ -66,6 +67,7 @@ public class SecurityConfiguration {
                         .requestMatchers(POST, EMPRUNTEUR_REGISTER_PATH).permitAll()
                         .requestMatchers(POST, PREPOSE_REGISTER_PATH).permitAll()
                         .requestMatchers(POST, STUDENT_CREATE_PATH).permitAll()
+                        .requestMatchers(GET, USER_EMAIL_CHECK_PATH).permitAll()
 //                        .requestMatchers(GET, "/api/user/student/**").permitAll() Pour tester. Ne pas garder en prod
                         .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll() // Allow CORS preflight requests
                         .requestMatchers(H2_CONSOLE_PATH).permitAll() // Allow H2 console access
